@@ -1,0 +1,2 @@
+# Nmap 7.95 scan initiated Wed Feb 12 18:20:46 2025 as: /usr/bin/nmap -sS -sV -O -p- --script vulners,ssl-enum-ciphers,ssh-auth-methods,smb-os-discovery,smb-vuln-ms17-010,smb-vuln-ms08-067 -T4 -oN /nmap_reports/nmap_report_2025-02-12_12-20-45.txt nmap 172.16.16.1
+Failed to resolve "nmap".

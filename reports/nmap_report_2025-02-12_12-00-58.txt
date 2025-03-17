@@ -1,0 +1,77 @@
+# Nmap 7.95 scan initiated Wed Feb 12 18:00:58 2025 as: nmap -sS -sV -O -p- --script vulners,ssl-enum-ciphers,ssh-auth-methods,smb-os-discovery,smb-vuln-ms17-010,smb-vuln-ms08-067 -T4 -oN "/nmap_reports/nmap_report_2025-02-12_12-00-58.txt" 172.16.16.1
+Nmap scan report for 172.16.16.1
+Host is up (0.0013s latency).
+Not shown: 65533 filtered tcp ports (no-response)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     (protocol 2.0)
+| fingerprint-strings: 
+|   NULL: 
+|_    SSH-2.0-TdBC4
+| ssh-auth-methods: 
+|   Supported authentication methods: 
+|     publickey
+|_    password
+80/tcp open  http
+| fingerprint-strings: 
+|   DNSStatusRequestTCP, DNSVersionBindReqTCP, Help, RPCCheck, SSLSessionReq, X11Probe: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|   FourOhFourRequest: 
+|     HTTP/1.1 301 Moved Permanently
+|     X-Frame-Options: SAMEORIGIN
+|     Content-Security-Policy: frame-ancestors 'self'
+|     X-XSS-Protection: 1; mode=block
+|     Strict-Transport-Security: max-age=0
+|     location: https://undefined:4443/nice%20ports%2C/Tri%6Eity.txt%2ebak
+|     Date: Wed, 12 Feb 2025 18:02:34 GMT
+|     Connection: close
+|   GetRequest, HTTPOptions, RTSPRequest: 
+|     HTTP/1.1 301 Moved Permanently
+|     X-Frame-Options: SAMEORIGIN
+|     Content-Security-Policy: frame-ancestors 'self'
+|     X-XSS-Protection: 1; mode=block
+|     Strict-Transport-Security: max-age=0
+|     location: https://undefined:4443/
+|     Date: Wed, 12 Feb 2025 18:02:34 GMT
+|_    Connection: close
+2 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port22-TCP:V=7.95%I=7%D=2/12%Time=67ACE239%P=x86_64-unknown-linux-gnu%r
+SF:(NULL,F,"SSH-2\.0-TdBC4\r\n");
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port80-TCP:V=7.95%I=7%D=2/12%Time=67ACE239%P=x86_64-unknown-linux-gnu%r
+SF:(GetRequest,112,"HTTP/1\.1\x20301\x20Moved\x20Permanently\r\nX-Frame-Op
+SF:tions:\x20SAMEORIGIN\r\nContent-Security-Policy:\x20frame-ancestors\x20
+SF:'self'\r\nX-XSS-Protection:\x201;\x20mode=block\r\nStrict-Transport-Sec
+SF:urity:\x20max-age=0\r\nlocation:\x20https://undefined:4443/\r\nDate:\x2
+SF:0Wed,\x2012\x20Feb\x202025\x2018:02:34\x20GMT\r\nConnection:\x20close\r
+SF:\n\r\n")%r(HTTPOptions,112,"HTTP/1\.1\x20301\x20Moved\x20Permanently\r\
+SF:nX-Frame-Options:\x20SAMEORIGIN\r\nContent-Security-Policy:\x20frame-an
+SF:cestors\x20'self'\r\nX-XSS-Protection:\x201;\x20mode=block\r\nStrict-Tr
+SF:ansport-Security:\x20max-age=0\r\nlocation:\x20https://undefined:4443/\
+SF:r\nDate:\x20Wed,\x2012\x20Feb\x202025\x2018:02:34\x20GMT\r\nConnection:
+SF:\x20close\r\n\r\n")%r(RTSPRequest,112,"HTTP/1\.1\x20301\x20Moved\x20Per
+SF:manently\r\nX-Frame-Options:\x20SAMEORIGIN\r\nContent-Security-Policy:\
+SF:x20frame-ancestors\x20'self'\r\nX-XSS-Protection:\x201;\x20mode=block\r
+SF:\nStrict-Transport-Security:\x20max-age=0\r\nlocation:\x20https://undef
+SF:ined:4443/\r\nDate:\x20Wed,\x2012\x20Feb\x202025\x2018:02:34\x20GMT\r\n
+SF:Connection:\x20close\r\n\r\n")%r(X11Probe,2F,"HTTP/1\.1\x20400\x20Bad\x
+SF:20Request\r\nConnection:\x20close\r\n\r\n")%r(FourOhFourRequest,135,"HT
+SF:TP/1\.1\x20301\x20Moved\x20Permanently\r\nX-Frame-Options:\x20SAMEORIGI
+SF:N\r\nContent-Security-Policy:\x20frame-ancestors\x20'self'\r\nX-XSS-Pro
+SF:tection:\x201;\x20mode=block\r\nStrict-Transport-Security:\x20max-age=0
+SF:\r\nlocation:\x20https://undefined:4443/nice%20ports%2C/Tri%6Eity\.txt%
+SF:2ebak\r\nDate:\x20Wed,\x2012\x20Feb\x202025\x2018:02:34\x20GMT\r\nConne
+SF:ction:\x20close\r\n\r\n")%r(RPCCheck,2F,"HTTP/1\.1\x20400\x20Bad\x20Req
+SF:uest\r\nConnection:\x20close\r\n\r\n")%r(DNSVersionBindReqTCP,2F,"HTTP/
+SF:1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(DNSSt
+SF:atusRequestTCP,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x2
+SF:0close\r\n\r\n")%r(Help,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConne
+SF:ction:\x20close\r\n\r\n")%r(SSLSessionReq,2F,"HTTP/1\.1\x20400\x20Bad\x
+SF:20Request\r\nConnection:\x20close\r\n\r\n");
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+OS fingerprint not ideal because: Missing a closed TCP port so results incomplete
+No OS matches for host
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed Feb 12 18:02:42 2025 -- 1 IP address (1 host up) scanned in 104.17 seconds
