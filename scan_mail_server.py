@@ -9,28 +9,18 @@ API_KEY = "mysecretapikey"
 ZAP_PROXY = "http://localhost:8080"
 zap = ZAPv2(apikey=API_KEY, proxies={'http': ZAP_PROXY, 'https': ZAP_PROXY})
 
-# Target to scan - MUST include http:// or https:// prefix
-target = "http://usi-mail06-mtka.usinternet.com"
+# Target to scan - add http:// prefix as it's required for proper scanning
+target = "https://usi-mail06-mtka.usinternet.com"
 
 # Generate timestamp for report naming
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-report_filename = f"zap_report_{target.replace('http://', '').replace('https://', '').replace('/', '_')}_{timestamp}"
+report_filename = f"zap_report_{target.replace('http://', '').replace('/', '_')}_{timestamp}"
 
-### 🛠 FIX 1: Start a NEW ZAP SESSION (to prevent previous scan data from contaminating)
+# Start a NEW ZAP SESSION
 print("Starting a fresh ZAP session to clear old scan data...")
 zap.core.new_session(name="NewSession", overwrite=True)
 
 print(f"Checking if target {target} is in the Sites tree...")
-
-# Access the target URL directly first to help with site discovery
-print(f"Directly accessing {target} first to help with discovery...")
-try:
-    zap.core.access_url(url=target)
-    print(f"Successfully accessed {target}")
-    time.sleep(3)  # Give ZAP time to process
-except Exception as e:
-    print(f"Warning: Error when trying to access {target}: {e}")
-    print("Will continue with spider scan anyway...")
 
 # Fetch existing sites from ZAP
 existing_sites = zap.core.sites
@@ -39,8 +29,11 @@ if not existing_sites or target not in existing_sites:
     print(f"Target {target} not found in Sites tree. Initiating Spider scan first...")
 
     # Start the Spider scan
+    print(f"Starting spider scan on {target}")
     spider_scan_id = zap.spider.scan(target)
-    if spider_scan_id in ['illegal_parameter', 'url_not_found']:
+    
+    # Check if the scan started successfully
+    if isinstance(spider_scan_id, str) and spider_scan_id in ['illegal_parameter', 'url_not_found']:
         print(f"Error: {spider_scan_id}. Check if the target is valid and accessible.")
         exit(1)
 
@@ -54,7 +47,7 @@ if not existing_sites or target not in existing_sites:
 
     print("Spider scan completed!")
 
-    # Wait until the target appears in the Sites tree before starting the active scan
+    # Wait until the target appears in the Sites tree
     print(f"Waiting for ZAP to register {target} in the Sites tree...")
     for i in range(10):  # Wait up to 10 retries
         existing_sites = zap.core.sites
@@ -64,21 +57,13 @@ if not existing_sites or target not in existing_sites:
         time.sleep(3)
     else:
         print(f"Error: Target {target} did not appear in the Sites tree. Active scan will not start.")
-        # Instead of exiting, let's try using a simpler target path
-        simple_target = target.split("//")[0] + "//" + target.split("//")[1].split("/")[0]
-        print(f"Attempting to use simplified target instead: {simple_target}")
-        if simple_target in existing_sites:
-            print(f"Found simplified target {simple_target} in Sites tree. Proceeding with this target.")
-            target = simple_target
-        else:
-            print("No suitable target found. Exiting.")
-            exit(1)
+        exit(1)
 
 # Now, proceed with the Active Scan
 print(f"Starting Active Scan for {target}...")
 
 scan_id = zap.ascan.scan(target)
-if scan_id in ['illegal_parameter', 'url_not_found']:
+if isinstance(scan_id, str) and scan_id in ['illegal_parameter', 'url_not_found']:
     print(f"Error: {scan_id}. Check if the target is valid and accessible.")
     exit(1)
 
@@ -97,8 +82,7 @@ while True:
 
 print("Active Scan completed!")
 
-### 🛠 FIX 2: GENERATE REPORTS **ONLY** FOR THE CURRENT SCAN TARGET
-# Get only the alerts for the scanned target
+# Generate reports for the current scan target only
 alerts = zap.core.alerts(baseurl=target)
 
 # Save alerts as JSON
@@ -107,7 +91,7 @@ with open(json_report_path, "w") as f:
     f.write(str(alerts))
 print(f"Filtered JSON Report saved: {json_report_path}")
 
-# Save XML report for this target only
+# Save XML report
 xml_report_path = f"{report_filename}.xml"
 with open(xml_report_path, "w") as f:
     f.write(zap.core.xmlreport())
@@ -119,4 +103,4 @@ with open(html_report_path, "w", encoding="utf-8") as f:
     f.write(zap.core.htmlreport())
 print(f"HTML Report saved: {html_report_path}")
 
-print("All reports generated successfully!")
+print("All reports generated successfully!") 

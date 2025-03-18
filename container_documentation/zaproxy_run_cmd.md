@@ -1,10 +1,4 @@
-docker run -d --name zap -p 8080:8080 \
-  -v C:/Users/Home/deepseek/Vuln_Scanner:/zap \
-  --network=bridge \
-  zaproxy/zap-weekly zap.sh -daemon -host 0.0.0.0 \
-  -config api.key=mysecretapikey \
-  -config api.addrs.addr.name=.* \
-  -config api.addrs.addr.regex=true
+docker run -d --name zap -p 8080:8080 -v "C:/Users/Home/deepseek/Vuln_Scanner:/zap" --network=bridge zaproxy/zap-weekly zap.sh -daemon -host 0.0.0.0 -config api.key=mysecretapikey -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
 
 
 
