@@ -23,24 +23,24 @@ try {
 Write-Host "Removing any existing ZAP containers..."
 docker rm -f zap 2>$null
 
-# Start ZAP container - Using the stable image instead of weekly
-Write-Host "Starting ZAP container..."
+# Start ZAP container with zaproxy/zap-weekly image and correct paths
+Write-Host "Starting ZAP container with zaproxy/zap-weekly image..."
 docker run -d --name zap -p 8080:8080 `
-    -v "${PWD}:/zap/wrk" `
-    owasp/zap2docker-stable zap.sh -daemon -host 0.0.0.0 `
+    -v "${PWD}:/home/zap/wrk" `
+    zaproxy/zap-weekly zap.sh -daemon -host 0.0.0.0 `
     -config api.key=mysecretapikey `
     -config api.addrs.addr.name=.* `
     -config api.addrs.addr.regex=true
 
 # Wait for ZAP to start
 Write-Host "Waiting for ZAP to start..."
-Start-Sleep -Seconds 15  # Increased wait time
+Start-Sleep -Seconds 20  # Increased wait time for weekly build
 
 # Check if ZAP is running
 Write-Host "Checking if ZAP is running..."
 $zapRunning = $false
 $retry = 0
-while (-not $zapRunning -and $retry -lt 3) {
+while (-not $zapRunning -and $retry -lt 5) {  # Increased retry attempts
     try {
         $response = Invoke-WebRequest -Uri "http://localhost:8080/JSON/core/view/version/?apikey=mysecretapikey" -TimeoutSec 5
         if ($response.StatusCode -eq 200) {
@@ -57,6 +57,8 @@ while (-not $zapRunning -and $retry -lt 3) {
 if (-not $zapRunning) {
     Write-Host "Failed to start ZAP. Checking container logs..."
     docker logs zap
+    Write-Host "Container status:"
+    docker ps -a | findstr zap
     exit 1
 }
 

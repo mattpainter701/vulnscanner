@@ -35,7 +35,7 @@ If you prefer to run the steps manually:
 
 1. Start the ZAP container:
 ```powershell
-docker run -d --name zap -p 8080:8080 -v "${PWD}:/zap/wrk" owasp/zap2docker-stable zap.sh -daemon -host 0.0.0.0 -config api.key=mysecretapikey -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+docker run -d --name zap -p 8080:8080 -v "${PWD}:/home/zap/wrk" zaproxy/zap-weekly zap.sh -daemon -host 0.0.0.0 -config api.key=mysecretapikey -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
 ```
 
 2. Edit the target in `container_documentation/zaproxy_test.py`
@@ -57,7 +57,8 @@ If you encounter issues:
 1. Make sure Docker is running
 2. Check container logs: `docker logs zap`
 3. Ensure the URL has the correct format (http:// or https://)
-4. Try with the stable ZAP image if the weekly one fails
+4. Check container status: `docker ps -a | findstr zap`
+5. The correct mount path for zaproxy/zap-weekly is `/home/zap/wrk` (not `/zap/wrk`)
 
 ## For AWS Fargate Deployment
 
