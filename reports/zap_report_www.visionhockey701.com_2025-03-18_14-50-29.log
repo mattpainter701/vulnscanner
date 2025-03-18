@@ -1,0 +1,51 @@
+Scan started at 2025-03-18 14:50:29 for target: https://www.visionhockey701.com
+2025-03-18 14:50:29 - Starting a fresh ZAP session to clear old scan data...
+2025-03-18 14:50:29 - Available contexts: ['Default Context']
+2025-03-18 14:50:29 - Created new context: Context_2025-03-18_14-50-29
+2025-03-18 14:50:29 - Included target in context: https://www.visionhockey701.com
+2025-03-18 14:50:29 - Checking if target https://www.visionhockey701.com is in the Sites tree...
+2025-03-18 14:50:29 - Directly accessing https://www.visionhockey701.com to help with discovery...
+2025-03-18 14:50:29 - Trying direct HTTP request first...
+2025-03-18 14:50:30 - Direct HTTP request status: 200
+2025-03-18 14:50:31 - Successfully accessed https://www.visionhockey701.com via ZAP
+2025-03-18 14:50:36 - Sites in ZAP: ['https://www.visionhockey701.com']
+2025-03-18 14:50:36 - Rechecking for target in sites...
+2025-03-18 14:50:36 - Target https://www.visionhockey701.com found in Sites tree. Proceeding with active scan.
+2025-03-18 14:50:36 - Starting Active Scan for https://www.visionhockey701.com...
+2025-03-18 14:50:36 - Active Scan started: 0
+2025-03-18 14:50:36 - Active Scan progress: 0%
+2025-03-18 14:50:41 - Active Scan progress: 25%
+2025-03-18 14:50:46 - Active Scan progress: 25%
+2025-03-18 14:50:51 - Active Scan progress: 25%
+2025-03-18 14:50:56 - Active Scan progress: 25%
+2025-03-18 14:51:01 - Active Scan progress: 25%
+2025-03-18 14:51:06 - Active Scan progress: 25%
+2025-03-18 14:51:11 - Active Scan progress: 25%
+2025-03-18 14:51:16 - Active Scan progress: 25%
+2025-03-18 14:51:21 - Active Scan progress: 25%
+2025-03-18 14:51:26 - Active Scan progress: 25%
+2025-03-18 14:51:31 - Active Scan progress: 25%
+2025-03-18 14:51:36 - Active Scan progress: 25%
+2025-03-18 14:51:41 - Active Scan progress: 25%
+2025-03-18 14:51:46 - Active Scan progress: 25%
+2025-03-18 14:51:51 - Active Scan progress: 25%
+2025-03-18 14:51:56 - Active Scan progress: 25%
+2025-03-18 14:52:01 - Active Scan progress: 25%
+2025-03-18 14:52:06 - Active Scan progress: 25%
+2025-03-18 14:52:11 - Active Scan progress: 25%
+2025-03-18 14:52:16 - Active Scan progress: 25%
+2025-03-18 14:52:21 - Active Scan progress: 25%
+2025-03-18 14:52:26 - Active Scan progress: 25%
+2025-03-18 14:52:31 - Active Scan progress: 25%
+2025-03-18 14:52:36 - Active Scan progress: 25%
+2025-03-18 14:52:41 - Active Scan progress: 25%
+2025-03-18 14:52:46 - Active Scan progress: 25%
+2025-03-18 14:52:51 - Active Scan progress: 25%
+2025-03-18 14:52:56 - Active Scan progress: 56%
+2025-03-18 14:53:01 - Active Scan progress: 56%
+2025-03-18 14:53:06 - Active Scan progress: 59%
+2025-03-18 14:53:11 - Active Scan completed or timed out!
+2025-03-18 14:53:11 - Found 60 alerts for https://www.visionhockey701.com
+2025-03-18 14:53:11 - Generated XML report with scan data
+2025-03-18 14:53:11 - Generated HTML report with scan data
+2025-03-18 14:53:11 - All reports generated and saved to the 'reports' directory.

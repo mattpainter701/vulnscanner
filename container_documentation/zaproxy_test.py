@@ -3,16 +3,27 @@ import time
 import os
 import sys
 import json
+import argparse
 from zapv2 import ZAPv2
 from datetime import datetime
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='ZAP Vulnerability Scanner')
+parser.add_argument('target', help='Target URL to scan (e.g., https://example.com)')
+args = parser.parse_args()
 
 # ZAP API Configuration
 API_KEY = "mysecretapikey"
 ZAP_PROXY = "http://localhost:8080"
 zap = ZAPv2(apikey=API_KEY, proxies={'http': ZAP_PROXY, 'https': ZAP_PROXY})
 
-# Target to scan - MUST include http:// or https:// prefix
-target = "https://usi-mail06-mtka.usinternet.com"
+# Target to scan - from command line argument
+target = args.target
+
+# Ensure target has protocol prefix
+if not target.startswith(('http://', 'https://')):
+    target = 'https://' + target
+    print(f"No protocol specified, using HTTPS by default: {target}")
 
 # Generate timestamp for report naming
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -411,6 +422,8 @@ if target.lower().find("mail") >= 0:
 
 generate_reports(scan_msg)
 log_event("All reports generated and saved to the 'reports' directory.")
+
+
 
 
 

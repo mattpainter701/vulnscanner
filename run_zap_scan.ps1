@@ -2,13 +2,16 @@
 # Usage: .\run_zap_scan.ps1 <target_url>
 param(
     [Parameter(Mandatory=$true)]
-    [string]$targetUrl
+    [string]$targetUrl,
+    
+    [Parameter(Mandatory=$false)]
+    [switch]$keepContainerRunning = $false
 )
 
 # Check if URL has http/https prefix
 if (-not ($targetUrl -match "^https?://")) {
-    Write-Host "Adding http:// prefix to URL..."
-    $targetUrl = "http://$targetUrl"
+    Write-Host "Adding https:// prefix to URL..."
+    $targetUrl = "https://$targetUrl"
 }
 
 # Create reports directory if it doesn't exist
@@ -68,12 +71,6 @@ if (-not $zapRunning) {
     exit 1
 }
 
-# Update the target in the script
-Write-Host "Updating target in the scan script..."
-$scriptContent = Get-Content -Path "container_documentation/zaproxy_test.py" -Raw
-$scriptContent = $scriptContent -replace '(target = "https?://)[^"]*"', ('$1' + $targetUrl.Replace("http://", "").Replace("https://", "") + '"')
-Set-Content -Path "container_documentation/zaproxy_test.py" -Value $scriptContent
-
 # Install required Python packages if not already installed
 Write-Host "Checking Python dependencies..."
 try {
@@ -87,18 +84,19 @@ try {
     py -m pip install python-owasp-zap-v2.4 requests
 }
 
-# Run the scan
+# Run the scan - pass the target URL as a command line argument
 Write-Host "Starting vulnerability scan against $targetUrl..."
-py container_documentation/zaproxy_test.py
+py container_documentation/zaproxy_test.py "$targetUrl"
 
 # Output results location
 Write-Host "`nScan completed! Check the generated reports."
 Write-Host "Reports are saved in the 'reports' directory with names starting with 'zap_report_'"
 
-# Offer to stop the ZAP container
-$stopContainer = Read-Host "Do you want to stop the ZAP container? (y/n)"
-if ($stopContainer -eq "y") {
+# Stop the container by default unless -keepContainerRunning is specified
+if (-not $keepContainerRunning) {
     Write-Host "Stopping ZAP container..."
     docker stop zap
     Write-Host "ZAP container stopped."
+} else {
+    Write-Host "ZAP container is still running. Stop it manually when done with 'docker stop zap'"
 } 

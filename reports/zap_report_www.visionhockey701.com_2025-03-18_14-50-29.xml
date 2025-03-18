@@ -1,0 +1,1057 @@
+<?xml version="1.0"?>
+<OWASPZAPReport programName="ZAP" version="D-2025-03-11" generated="Tue, 18 Mar 2025 19:53:11">
+	
+		<site name="https://www.visionhockey701.com" host="www.visionhockey701.com" port="443" ssl="true">
+			<alerts>
+				
+					<alertitem>
+						<pluginid>10038</pluginid>
+						<alertRef>10038-1</alertRef>
+						<alert>Content Security Policy (CSP) Header Not Set</alert>
+						<name>Content Security Policy (CSP) Header Not Set</name>
+						<riskcode>2</riskcode>
+						<confidence>3</confidence>
+						<riskdesc>Medium (High)</riskdesc>
+						<confidencedesc>High</confidencedesc>
+						<desc>&lt;p&gt;Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page &#x2014; covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy&lt;/p&gt;&lt;p&gt;https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html&lt;/p&gt;&lt;p&gt;https://www.w3.org/TR/CSP/&lt;/p&gt;&lt;p&gt;https://w3c.github.io/webappsec-csp/&lt;/p&gt;&lt;p&gt;https://web.dev/articles/csp&lt;/p&gt;&lt;p&gt;https://caniuse.com/#feat=contentsecuritypolicy&lt;/p&gt;&lt;p&gt;https://content-security-policy.com/&lt;/p&gt;</reference>
+						<cweid>693</cweid>
+						<wascid>15</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10020</pluginid>
+						<alertRef>10020-1</alertRef>
+						<alert>Missing Anti-clickjacking Header</alert>
+						<name>Missing Anti-clickjacking Header</name>
+						<riskcode>2</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Medium (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The response does not protect against &apos;ClickJacking&apos; attacks. It should include either Content-Security-Policy with &apos;frame-ancestors&apos; directive or X-Frame-Options.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>x-frame-options</param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Modern Web browsers support the Content-Security-Policy and X-Frame-Options HTTP headers. Ensure one of them is set on all web pages returned by your site/app.&lt;/p&gt;&lt;p&gt;If you expect the page to be framed only by pages on your server (e.g. it&apos;s part of a FRAMESET) then you&apos;ll want to use SAMEORIGIN, otherwise if you never expect the page to be framed, you should use DENY. Alternatively consider implementing Content Security Policy&apos;s &quot;frame-ancestors&quot; directive.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options&lt;/p&gt;</reference>
+						<cweid>1021</cweid>
+						<wascid>15</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>40025</pluginid>
+						<alertRef>40025</alertRef>
+						<alert>Proxy Disclosure</alert>
+						<name>Proxy Disclosure</name>
+						<riskcode>2</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Medium (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;1 proxy server(s) were detected or fingerprinted. This information helps a potential attacker to determine&lt;/p&gt;&lt;p&gt;- A list of targets for an attack against the application.&lt;/p&gt;&lt;p&gt; - Potential vulnerabilities on the proxy servers that service the application.&lt;/p&gt;&lt;p&gt; - The presence or absence of any proxy-based components that might cause attacks against the application to be detected, prevented, or mitigated.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack>TRACE, OPTIONS methods with &apos;Max-Forwards&apos; header. TRACK method.</attack>
+									<evidence></evidence>
+									<otherinfo>Using the TRACE, OPTIONS, and TRACK methods, the following proxy servers have been identified between ZAP and the application/web server:
+- Unknown
+The following web/application server has been identified:
+- Pepyaka
+</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Disable the &apos;TRACE&apos; method on the proxy servers, as well as the origin web/application server.&lt;/p&gt;&lt;p&gt;Disable the &apos;OPTIONS&apos; method on the proxy servers, as well as the origin web/application server, if it is not required for other purposes, such as &apos;CORS&apos; (Cross Origin Resource Sharing).&lt;/p&gt;&lt;p&gt;Configure the web and application servers with custom error pages, to prevent &apos;fingerprintable&apos; product-specific error pages being leaked to the user in the event of HTTP errors, such as &apos;TRACK&apos; requests for non-existent pages.&lt;/p&gt;&lt;p&gt;Configure all proxies, application servers, and web servers to prevent disclosure of the technology and version information in the &apos;Server&apos; and &apos;X-Powered-By&apos; HTTP response headers.&lt;/p&gt;&lt;p&gt;&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;Using the TRACE, OPTIONS, and TRACK methods, the following proxy servers have been identified between ZAP and the application/web server:&lt;/p&gt;&lt;p&gt;- Unknown&lt;/p&gt;&lt;p&gt;The following web/application server has been identified:&lt;/p&gt;&lt;p&gt;- Pepyaka&lt;/p&gt;&lt;p&gt;&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://tools.ietf.org/html/rfc7231#section-5.1.2&lt;/p&gt;</reference>
+						<cweid>204</cweid>
+						<wascid>45</wascid>
+						<sourceid>992</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10099</pluginid>
+						<alertRef>10099</alertRef>
+						<alert>Source Code Disclosure - SQL</alert>
+						<name>Source Code Disclosure - SQL</name>
+						<riskcode>2</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Medium (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;Application Source Code was disclosed by the web server. - SQL&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>Select your preferred payment provider from PayPal, Stripe </evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Ensure that application Source Code is not available with alternative extensions, and ensure that source code is not present within other files or data deployed to the web server, or served by the web server.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://www.wsj.com/articles/BL-CIOB-2999&lt;/p&gt;</reference>
+						<cweid>540</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>90003</pluginid>
+						<alertRef>90003</alertRef>
+						<alert>Sub Resource Integrity Attribute Missing</alert>
+						<name>Sub Resource Integrity Attribute Missing</name>
+						<riskcode>2</riskcode>
+						<confidence>3</confidence>
+						<riskdesc>Medium (High)</riskdesc>
+						<confidencedesc>High</confidencedesc>
+						<desc>&lt;p&gt;The integrity attribute is missing on a script or link tag served by an external server. The integrity tag prevents an attacker who have gained access to this server from injecting a malicious content.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link href=&quot;https://siteassets.parastorage.com/pages/pages/thunderbolt?appDefinitionIdToSiteRevision=%7B%2214271d6f-ba62-d045-549b-ab972ae1f70e%22%3A%2225%22%7D&amp;beckyExperiments=.DatePickerPortal%2C.LoginBarEnableLoggingInStateInSSR%2C.TextInputAutoFillFix%2C.buttonUdp%2C.calculateCollapsibleTextLineHeightByFont%2C.cssInBlocks%2C.dataBindingInMasterResponsive%2C.dropAppsClientSpecMapByApplicationId%2C.encodeUris%2C.fetchBlocksDevCenterWidgetIds%2C.fiveGridLineStudioSkins%2C.getSiteOverrideFromAllInflationChain%2C.imageEncodingAVIF%2C.overflowXClipInMobile%2C.prefetchPageResourcesVeloApi%2C.removeAllStatesBlocksFix%2C.shouldUseResponsiveImages%2C.sliderGalleryWAAPI%2C.updateRichTextSemanticClassNamesOnCorvid%2C.useInternalBlocksRefType%2C.useSvgLoaderFeature&amp;blocksBuilderManifestGeneratorVersion=1.129.0&amp;contentType=application%2Fjson&amp;deviceType=Desktop&amp;dfCk=6&amp;dfVersion=1.4500.0&amp;disableStaticPagesUrlHierarchy=false&amp;editorName=Unknown&amp;experiments=dm_bgScrubToMotionFixer%2Cdm_deleteLayoutOverridesForRefComponents%2Cdm_migrateOldHoverBoxToNewFixer%2Cdm_removeTpaChildren%2Cspecs.thunderbolt.use_data_fixed_pages_upstream&amp;externalBaseUrl=https%3A%2F%2Fwww.visionhockey701.com&amp;fileId=6f7b1084.bundle.min&amp;formFactor=desktop&amp;hasTPAWorkerOnSite=false&amp;isHttps=true&amp;isInSeo=false&amp;isMultilingualEnabled=false&amp;isPremiumDomain=true&amp;isTrackClicksAnalyticsEnabled=true&amp;isUrlMigrated=true&amp;isWixCodeOnPage=false&amp;isWixCodeOnSite=false&amp;language=en&amp;languageResolutionMethod=QueryParam&amp;metaSiteId=34c76726-a689-4391-9136-f1a71b23f8ba&amp;module=thunderbolt-features&amp;oneDocEnabled=true&amp;originalLanguage=en&amp;pageId=c0c114_849057d838aa11305d53f2acc2812891_4422.json&amp;quickActionsMenuEnabled=false&amp;registryLibrariesTopology=%5B%7B%22artifactId%22%3A%22editor-elements%22%2C%22namespace%22%3A%22wixui%22%2C%22url%22%3A%22https%3A%2F%2Fstatic.parastorage.com%2Fservices%2Feditor-elements%2F1.13490.0%22%7D%2C%7B%22artifactId%22%3A%22editor-elements%22%2C%22namespace%22%3A%22dsgnsys%22%2C%22url%22%3A%22https%3A%2F%2Fstatic.parastorage.com%2Fservices%2Feditor-elements%2F1.13490.0%22%7D%5D&amp;remoteWidgetStructureBuilderVersion=1.251.0&amp;siteId=3c533362-9638-4f81-9bf7-1f9e9e698245&amp;siteRevision=4423&amp;staticHTMLComponentUrl=https%3A%2F%2Fwww-visionhockey701-com.filesusr.com%2F&amp;useSandboxInHTMLComp=false&amp;viewMode=desktop&quot; id=&quot;features_masterPage&quot; as=&quot;fetch&quot; position=&quot;post-scripts&quot; rel=&quot;preload&quot; crossorigin=&quot;anonymous&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link href=&quot;https://siteassets.parastorage.com/pages/pages/thunderbolt?appDefinitionIdToSiteRevision=%7B%2214271d6f-ba62-d045-549b-ab972ae1f70e%22%3A%2225%22%7D&amp;beckyExperiments=.DatePickerPortal%2C.LoginBarEnableLoggingInStateInSSR%2C.TextInputAutoFillFix%2C.buttonUdp%2C.calculateCollapsibleTextLineHeightByFont%2C.cssInBlocks%2C.dataBindingInMasterResponsive%2C.dropAppsClientSpecMapByApplicationId%2C.encodeUris%2C.fetchBlocksDevCenterWidgetIds%2C.fiveGridLineStudioSkins%2C.getSiteOverrideFromAllInflationChain%2C.imageEncodingAVIF%2C.overflowXClipInMobile%2C.prefetchPageResourcesVeloApi%2C.removeAllStatesBlocksFix%2C.shouldUseResponsiveImages%2C.sliderGalleryWAAPI%2C.updateRichTextSemanticClassNamesOnCorvid%2C.useInternalBlocksRefType%2C.useSvgLoaderFeature&amp;blocksBuilderManifestGeneratorVersion=1.129.0&amp;contentType=application%2Fjson&amp;deviceType=Desktop&amp;dfCk=6&amp;dfVersion=1.4500.0&amp;disableStaticPagesUrlHierarchy=false&amp;editorName=Unknown&amp;experiments=dm_bgScrubToMotionFixer%2Cdm_deleteLayoutOverridesForRefComponents%2Cdm_migrateOldHoverBoxToNewFixer%2Cdm_removeTpaChildren%2Cspecs.thunderbolt.use_data_fixed_pages_upstream&amp;externalBaseUrl=https%3A%2F%2Fwww.visionhockey701.com&amp;fileId=6f7b1084.bundle.min&amp;formFactor=desktop&amp;hasTPAWorkerOnSite=false&amp;isHttps=true&amp;isInSeo=false&amp;isMultilingualEnabled=false&amp;isPremiumDomain=true&amp;isTrackClicksAnalyticsEnabled=true&amp;isUrlMigrated=true&amp;isWixCodeOnPage=false&amp;isWixCodeOnSite=false&amp;language=en&amp;languageResolutionMethod=QueryParam&amp;metaSiteId=34c76726-a689-4391-9136-f1a71b23f8ba&amp;module=thunderbolt-features&amp;oneDocEnabled=true&amp;originalLanguage=en&amp;pageId=c0c114_b16ed8d603edac4608abc091c9bed1d7_4422.json&amp;quickActionsMenuEnabled=false&amp;registryLibrariesTopology=%5B%7B%22artifactId%22%3A%22editor-elements%22%2C%22namespace%22%3A%22wixui%22%2C%22url%22%3A%22https%3A%2F%2Fstatic.parastorage.com%2Fservices%2Feditor-elements%2F1.13490.0%22%7D%2C%7B%22artifactId%22%3A%22editor-elements%22%2C%22namespace%22%3A%22dsgnsys%22%2C%22url%22%3A%22https%3A%2F%2Fstatic.parastorage.com%2Fservices%2Feditor-elements%2F1.13490.0%22%7D%5D&amp;remoteWidgetStructureBuilderVersion=1.251.0&amp;siteId=3c533362-9638-4f81-9bf7-1f9e9e698245&amp;siteRevision=4423&amp;staticHTMLComponentUrl=https%3A%2F%2Fwww-visionhockey701-com.filesusr.com%2F&amp;useSandboxInHTMLComp=false&amp;viewMode=desktop&quot; id=&quot;features_c1dmp&quot; as=&quot;fetch&quot; position=&quot;post-scripts&quot; rel=&quot;preload&quot; crossorigin=&quot;anonymous&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link href=&quot;https://siteassets.parastorage.com/pages/pages/thunderbolt?appDefinitionIdToSiteRevision=%7B%2214271d6f-ba62-d045-549b-ab972ae1f70e%22%3A%2225%22%7D&amp;beckyExperiments=.DatePickerPortal%2C.LoginBarEnableLoggingInStateInSSR%2C.TextInputAutoFillFix%2C.buttonUdp%2C.calculateCollapsibleTextLineHeightByFont%2C.dataBindingInMasterResponsive%2C.fetchBlocksDevCenterWidgetIds%2C.fiveGridLineStudioSkins%2C.getSiteOverrideFromAllInflationChain%2C.overflowXClipInMobile%2C.updateRichTextSemanticClassNamesOnCorvid%2C.useInternalBlocksRefType&amp;blocksBuilderManifestGeneratorVersion=1.129.0&amp;contentType=application%2Fjson&amp;dfCk=6&amp;dfVersion=1.4500.0&amp;editorName=Unknown&amp;experiments=dm_bgScrubToMotionFixer%2Cdm_deleteLayoutOverridesForRefComponents%2Cdm_migrateOldHoverBoxToNewFixer%2Cdm_removeTpaChildren%2Cspecs.thunderbolt.use_data_fixed_pages_upstream&amp;externalBaseUrl=https%3A%2F%2Fwww.visionhockey701.com&amp;fileId=529b2122.bundle.min&amp;formFactor=desktop&amp;hasTPAWorkerOnSite=false&amp;isHttps=true&amp;isInSeo=false&amp;isPremiumDomain=true&amp;isUrlMigrated=true&amp;isWixCodeOnPage=false&amp;isWixCodeOnSite=false&amp;language=en&amp;metaSiteId=34c76726-a689-4391-9136-f1a71b23f8ba&amp;module=thunderbolt-platform&amp;oneDocEnabled=true&amp;originalLanguage=en&amp;pageId=c0c114_849057d838aa11305d53f2acc2812891_4422.json&amp;quickActionsMenuEnabled=false&amp;registryLibrariesTopology=%5B%7B%22artifactId%22%3A%22editor-elements%22%2C%22namespace%22%3A%22wixui%22%2C%22url%22%3A%22https%3A%2F%2Fstatic.parastorage.com%2Fservices%2Feditor-elements%2F1.13490.0%22%7D%2C%7B%22artifactId%22%3A%22editor-elements%22%2C%22namespace%22%3A%22dsgnsys%22%2C%22url%22%3A%22https%3A%2F%2Fstatic.parastorage.com%2Fservices%2Feditor-elements%2F1.13490.0%22%7D%5D&amp;remoteWidgetStructureBuilderVersion=1.251.0&amp;siteId=3c533362-9638-4f81-9bf7-1f9e9e698245&amp;siteRevision=4423&amp;staticHTMLComponentUrl=https%3A%2F%2Fwww-visionhockey701-com.filesusr.com%2F&amp;viewMode=desktop&quot; id=&quot;platform_masterPage&quot; as=&quot;fetch&quot; position=&quot;post-scripts&quot; rel=&quot;preload&quot; crossorigin=&quot;anonymous&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link href=&quot;https://siteassets.parastorage.com/pages/pages/thunderbolt?appDefinitionIdToSiteRevision=%7B%2214271d6f-ba62-d045-549b-ab972ae1f70e%22%3A%2225%22%7D&amp;beckyExperiments=.DatePickerPortal%2C.LoginBarEnableLoggingInStateInSSR%2C.TextInputAutoFillFix%2C.buttonUdp%2C.calculateCollapsibleTextLineHeightByFont%2C.dataBindingInMasterResponsive%2C.fetchBlocksDevCenterWidgetIds%2C.fiveGridLineStudioSkins%2C.getSiteOverrideFromAllInflationChain%2C.overflowXClipInMobile%2C.updateRichTextSemanticClassNamesOnCorvid%2C.useInternalBlocksRefType&amp;blocksBuilderManifestGeneratorVersion=1.129.0&amp;contentType=application%2Fjson&amp;dfCk=6&amp;dfVersion=1.4500.0&amp;editorName=Unknown&amp;experiments=dm_bgScrubToMotionFixer%2Cdm_deleteLayoutOverridesForRefComponents%2Cdm_migrateOldHoverBoxToNewFixer%2Cdm_removeTpaChildren%2Cspecs.thunderbolt.use_data_fixed_pages_upstream&amp;externalBaseUrl=https%3A%2F%2Fwww.visionhockey701.com&amp;fileId=529b2122.bundle.min&amp;formFactor=desktop&amp;hasTPAWorkerOnSite=false&amp;isHttps=true&amp;isInSeo=false&amp;isPremiumDomain=true&amp;isUrlMigrated=true&amp;isWixCodeOnPage=false&amp;isWixCodeOnSite=false&amp;language=en&amp;metaSiteId=34c76726-a689-4391-9136-f1a71b23f8ba&amp;module=thunderbolt-platform&amp;oneDocEnabled=true&amp;originalLanguage=en&amp;pageId=c0c114_b16ed8d603edac4608abc091c9bed1d7_4422.json&amp;quickActionsMenuEnabled=false&amp;registryLibrariesTopology=%5B%7B%22artifactId%22%3A%22editor-elements%22%2C%22namespace%22%3A%22wixui%22%2C%22url%22%3A%22https%3A%2F%2Fstatic.parastorage.com%2Fservices%2Feditor-elements%2F1.13490.0%22%7D%2C%7B%22artifactId%22%3A%22editor-elements%22%2C%22namespace%22%3A%22dsgnsys%22%2C%22url%22%3A%22https%3A%2F%2Fstatic.parastorage.com%2Fservices%2Feditor-elements%2F1.13490.0%22%7D%5D&amp;remoteWidgetStructureBuilderVersion=1.251.0&amp;siteId=3c533362-9638-4f81-9bf7-1f9e9e698245&amp;siteRevision=4423&amp;staticHTMLComponentUrl=https%3A%2F%2Fwww-visionhockey701-com.filesusr.com%2F&amp;viewMode=desktop&quot; id=&quot;platform_c1dmp&quot; as=&quot;fetch&quot; position=&quot;post-scripts&quot; rel=&quot;preload&quot; crossorigin=&quot;anonymous&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link rel=&quot;apple-touch-icon&quot; href=&quot;https://static.wixstatic.com/media/c0c114_2bf42a655d74406286df2a54717c7787%7Emv2.png/v1/fill/w_180%2Ch_180%2Clg_1%2Cusm_0.66_1.00_0.01/c0c114_2bf42a655d74406286df2a54717c7787%7Emv2.png&quot; type=&quot;image/png&quot;/&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link rel=&quot;apple-touch-icon&quot; href=&quot;https://static.wixstatic.com/media/c0c114_f45e45bb44ff4708a9b27286108d2cc7~mv2.png&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;152x152&quot; href=&quot;https://static.wixstatic.com/media/c0c114_fd1400ec2c1a47d992483f2c04dd14f5~mv2.png&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;167x167&quot; href=&quot;https://static.wixstatic.com/media/c0c114_41e43ddedb5344e2b57c0398bcff7d53~mv2.png&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;180x180&quot; href=&quot;https://static.wixstatic.com/media/c0c114_f4e2281b950b41b290ce4195d999224f~mv2.png&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link rel=&quot;icon&quot; sizes=&quot;192x192&quot; href=&quot;https://static.wixstatic.com/media/c0c114_2bf42a655d74406286df2a54717c7787%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/c0c114_2bf42a655d74406286df2a54717c7787%7Emv2.png&quot; type=&quot;image/png&quot;/&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link rel=&quot;icon&quot; sizes=&quot;192x192&quot; href=&quot;https://static.wixstatic.com/media/c0c114_593b2505e234410d8c10b58d89242a10~mv2.png&quot;&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;link rel=&quot;shortcut icon&quot; href=&quot;https://static.wixstatic.com/media/c0c114_2bf42a655d74406286df2a54717c7787%7Emv2.png/v1/fill/w_32%2Ch_32%2Clg_1%2Cusm_0.66_1.00_0.01/c0c114_2bf42a655d74406286df2a54717c7787%7Emv2.png&quot; type=&quot;image/png&quot;/&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; onload=&quot;resolveExternalsRegistryModule(&apos;lodash&apos;)&quot; src=&quot;https://static.parastorage.com/unpkg/lodash@4.17.21/lodash.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; src=&quot;https://static.parastorage.com/services/wix-thunderbolt/dist/browser-deprecation.bundle.es5.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; src=&quot;https://static.parastorage.com/services/wix-thunderbolt/dist/main.0e5a4e30.bundle.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; src=&quot;https://static.parastorage.com/services/wix-thunderbolt/dist/main.renderer.a20626f8.bundle.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; src=&quot;https://static.parastorage.com/services/wix-thunderbolt/dist/thunderbolt-commons.be569025.bundle.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script crossorigin=&quot;&quot; defer=&quot;&quot; onload=&quot;resolveExternalsRegistryModule(&apos;reactDOM&apos;)&quot; src=&quot;https://static.parastorage.com/unpkg/react-dom@18.3.1/umd/react-dom.production.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script crossorigin=&quot;&quot; onload=&quot;resolveExternalsRegistryModule(&apos;react&apos;)&quot; src=&quot;https://static.parastorage.com/unpkg/react@18.3.1/umd/react.production.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script defer=&quot;&quot; src=&quot;https://static.parastorage.com/services/tag-manager-client/1.920.0/siteTags.bundle.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script nomodule=&quot;&quot; src=&quot;https://static.parastorage.com/unpkg/core-js-bundle@3.2.1/minified.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script nomodule=&quot;&quot; src=&quot;https://static.parastorage.com/unpkg/focus-within-polyfill@5.0.9/dist/focus-within-polyfill.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;script src=&quot;https://browser.sentry-cdn.com/7.120.3/modulemetadata.es5.min.js&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>23</count>
+						<solution>&lt;p&gt;Provide a valid integrity attribute to the tag.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity&lt;/p&gt;</reference>
+						<cweid>345</cweid>
+						<wascid>15</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10010</pluginid>
+						<alertRef>10010</alertRef>
+						<alert>Cookie No HttpOnly Flag</alert>
+						<name>Cookie No HttpOnly Flag</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>ssr-caching</param>
+									<attack></attack>
+									<evidence>set-cookie: ssr-caching</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Ensure that the HttpOnly flag is set for all cookies.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://owasp.org/www-community/HttpOnly&lt;/p&gt;</reference>
+						<cweid>1004</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10011</pluginid>
+						<alertRef>10011</alertRef>
+						<alert>Cookie Without Secure Flag</alert>
+						<name>Cookie Without Secure Flag</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;A cookie has been set without the secure flag, which means that the cookie can be accessed via unencrypted connections.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>ssr-caching</param>
+									<attack></attack>
+									<evidence>set-cookie: ssr-caching</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Whenever a cookie contains sensitive information or is a session token, then it should always be passed using an encrypted channel. Ensure that the secure flag is set for cookies containing such sensitive information.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes.html&lt;/p&gt;</reference>
+						<cweid>614</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10054</pluginid>
+						<alertRef>10054-1</alertRef>
+						<alert>Cookie without SameSite Attribute</alert>
+						<name>Cookie without SameSite Attribute</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;A cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a &apos;cross-site&apos; request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>ssr-caching</param>
+									<attack></attack>
+									<evidence>set-cookie: ssr-caching</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Ensure that the SameSite attribute is set to either &apos;lax&apos; or ideally &apos;strict&apos; for all cookies.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site&lt;/p&gt;</reference>
+						<cweid>1275</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10017</pluginid>
+						<alertRef>10017</alertRef>
+						<alert>Cross-Domain JavaScript Source File Inclusion</alert>
+						<name>Cross-Domain JavaScript Source File Inclusion</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The page includes one or more script files from a third-party domain.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://browser.sentry-cdn.com/7.120.3/modulemetadata.es5.min.js</param>
+									<attack></attack>
+									<evidence>&lt;script src=&quot;https://browser.sentry-cdn.com/7.120.3/modulemetadata.es5.min.js&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/services/tag-manager-client/1.920.0/siteTags.bundle.min.js</param>
+									<attack></attack>
+									<evidence>&lt;script defer=&quot;&quot; src=&quot;https://static.parastorage.com/services/tag-manager-client/1.920.0/siteTags.bundle.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/services/wix-thunderbolt/dist/browser-deprecation.bundle.es5.js</param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; src=&quot;https://static.parastorage.com/services/wix-thunderbolt/dist/browser-deprecation.bundle.es5.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/services/wix-thunderbolt/dist/main.0e5a4e30.bundle.min.js</param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; src=&quot;https://static.parastorage.com/services/wix-thunderbolt/dist/main.0e5a4e30.bundle.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/services/wix-thunderbolt/dist/main.renderer.a20626f8.bundle.min.js</param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; src=&quot;https://static.parastorage.com/services/wix-thunderbolt/dist/main.renderer.a20626f8.bundle.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/services/wix-thunderbolt/dist/thunderbolt-commons.be569025.bundle.min.js</param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; src=&quot;https://static.parastorage.com/services/wix-thunderbolt/dist/thunderbolt-commons.be569025.bundle.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/unpkg/core-js-bundle@3.2.1/minified.js</param>
+									<attack></attack>
+									<evidence>&lt;script nomodule=&quot;&quot; src=&quot;https://static.parastorage.com/unpkg/core-js-bundle@3.2.1/minified.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/unpkg/focus-within-polyfill@5.0.9/dist/focus-within-polyfill.js</param>
+									<attack></attack>
+									<evidence>&lt;script nomodule=&quot;&quot; src=&quot;https://static.parastorage.com/unpkg/focus-within-polyfill@5.0.9/dist/focus-within-polyfill.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/unpkg/lodash@4.17.21/lodash.min.js</param>
+									<attack></attack>
+									<evidence>&lt;script async=&quot;&quot; onload=&quot;resolveExternalsRegistryModule(&apos;lodash&apos;)&quot; src=&quot;https://static.parastorage.com/unpkg/lodash@4.17.21/lodash.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/unpkg/react-dom@18.3.1/umd/react-dom.production.min.js</param>
+									<attack></attack>
+									<evidence>&lt;script crossorigin=&quot;&quot; defer=&quot;&quot; onload=&quot;resolveExternalsRegistryModule(&apos;reactDOM&apos;)&quot; src=&quot;https://static.parastorage.com/unpkg/react-dom@18.3.1/umd/react-dom.production.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>https://static.parastorage.com/unpkg/react@18.3.1/umd/react.production.min.js</param>
+									<attack></attack>
+									<evidence>&lt;script crossorigin=&quot;&quot; onload=&quot;resolveExternalsRegistryModule(&apos;react&apos;)&quot; src=&quot;https://static.parastorage.com/unpkg/react@18.3.1/umd/react.production.min.js&quot;&gt;&lt;/script&gt;</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>11</count>
+						<solution>&lt;p&gt;Ensure JavaScript source files are loaded from only trusted sources, and the sources can&apos;t be controlled by end users of the application.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference></reference>
+						<cweid>829</cweid>
+						<wascid>15</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>90004</pluginid>
+						<alertRef>90004-1</alertRef>
+						<alert>Insufficient Site Isolation Against Spectre Vulnerability</alert>
+						<name>Insufficient Site Isolation Against Spectre Vulnerability</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;Cross-Origin-Resource-Policy header is an opt-in header designed to counter side-channels attacks like Spectre. Resource should be specifically set as shareable amongst different origins.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>Cross-Origin-Resource-Policy</param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>Cross-Origin-Embedder-Policy</param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>Cross-Origin-Opener-Policy</param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>3</count>
+						<solution>&lt;p&gt;Ensure that the application/web server sets the Cross-Origin-Resource-Policy header appropriately, and that it sets the Cross-Origin-Resource-Policy header to &apos;same-origin&apos; for all web pages.&lt;/p&gt;&lt;p&gt;&apos;same-site&apos; is considered as less secured and should be avoided.&lt;/p&gt;&lt;p&gt;If resources must be shared, set the header to &apos;cross-origin&apos;.&lt;/p&gt;&lt;p&gt;If possible, ensure that the end user uses a standards-compliant and modern web browser that supports the Cross-Origin-Resource-Policy header (https://caniuse.com/mdn-http_headers_cross-origin-resource-policy).&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Cross-Origin_Resource_Policy&lt;/p&gt;</reference>
+						<cweid>693</cweid>
+						<wascid>14</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10063</pluginid>
+						<alertRef>10063-1</alertRef>
+						<alert>Permissions Policy Header Not Set</alert>
+						<name>Permissions Policy Header Not Set</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;Permissions Policy Header is an added layer of security that helps to restrict from unauthorized access or usage of browser/client features by web resources. This policy ensures the user privacy by limiting or specifying the features of the browsers can be used by the web resources. Permissions Policy provides a set of standard HTTP headers that allow website owners to limit which features of browsers can be used by the page such as camera, microphone, location, full screen etc.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Ensure that your web server, application server, load balancer, etc. is configured to set the Permissions-Policy header.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy&lt;/p&gt;&lt;p&gt;https://developer.chrome.com/blog/feature-policy/&lt;/p&gt;&lt;p&gt;https://scotthelme.co.uk/a-new-security-header-feature-policy/&lt;/p&gt;&lt;p&gt;https://w3c.github.io/webappsec-feature-policy/&lt;/p&gt;&lt;p&gt;https://www.smashingmagazine.com/2018/12/feature-policy/&lt;/p&gt;</reference>
+						<cweid>693</cweid>
+						<wascid>15</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10096</pluginid>
+						<alertRef>10096</alertRef>
+						<alert>Timestamp Disclosure - Unix</alert>
+						<name>Timestamp Disclosure - Unix</name>
+						<riskcode>1</riskcode>
+						<confidence>1</confidence>
+						<riskdesc>Low (Low)</riskdesc>
+						<confidencedesc>Low</confidencedesc>
+						<desc>&lt;p&gt;A timestamp was disclosed by the application/web server. - Unix&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>1742326151</evidence>
+									<otherinfo>1742326151, which evaluates to: 2025-03-18 19:29:11.</otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>x-wix-request-id</param>
+									<attack></attack>
+									<evidence>1742327431</evidence>
+									<otherinfo>1742327431, which evaluates to: 2025-03-18 19:50:31.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>2</count>
+						<solution>&lt;p&gt;Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;1742326151, which evaluates to: 2025-03-18 19:29:11.&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://cwe.mitre.org/data/definitions/200.html&lt;/p&gt;</reference>
+						<cweid>497</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>90027</pluginid>
+						<alertRef>90027</alertRef>
+						<alert>Cookie Slack Detector</alert>
+						<name>Cookie Slack Detector</name>
+						<riskcode>0</riskcode>
+						<confidence>1</confidence>
+						<riskdesc>Informational (Low)</riskdesc>
+						<confidencedesc>Low</confidencedesc>
+						<desc>&lt;p&gt;Repeated GET requests: drop a different cookie each time, followed by normal request with all cookies to stabilize session, compare responses against original baseline GET. This can reveal areas where cookie based authentication/attributes are not actually enforced.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo>Cookies that don&apos;t have expected effects can reveal flaws in application logic. In the worst case, this can reveal where authentication via cookie token(s) is not actually enforced.
+These cookies affected the response: 
+These cookies did NOT affect the response: ssr-caching
+</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution></solution>
+						<otherinfo>&lt;p&gt;Cookies that don&apos;t have expected effects can reveal flaws in application logic. In the worst case, this can reveal where authentication via cookie token(s) is not actually enforced.&lt;/p&gt;&lt;p&gt;These cookies affected the response: &lt;/p&gt;&lt;p&gt;These cookies did NOT affect the response: ssr-caching&lt;/p&gt;&lt;p&gt;&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://cwe.mitre.org/data/definitions/205.html&lt;/p&gt;</reference>
+						<cweid>205</cweid>
+						<wascid>45</wascid>
+						<sourceid>1005</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10027</pluginid>
+						<alertRef>10027</alertRef>
+						<alert>Information Disclosure - Suspicious Comments</alert>
+						<name>Information Disclosure - Suspicious Comments</name>
+						<riskcode>0</riskcode>
+						<confidence>1</confidence>
+						<riskdesc>Informational (Low)</riskdesc>
+						<confidencedesc>Low</confidencedesc>
+						<desc>&lt;p&gt;The response appears to contain suspicious comments which may help an attacker.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>debug</evidence>
+									<otherinfo>The following pattern was used: \bDEBUG\b and was detected 2 times, the first in likely comment: &quot;//static.parastorage.com/services/wix-thunderbolt/dist/webpack-runtime.7ea34ff4.bundle.min.js&quot;&gt;(()=&gt;{&quot;use strict&quot;;var e,o,a,r,t,&quot;, see evidence field for the suspicious comment/snippet.</otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>from</evidence>
+									<otherinfo>The following pattern was used: \bFROM\b and was detected 3 times, the first in likely comment: &quot;//static.parastorage.com/services/wix-thunderbolt/dist/overrideGlobals.inline.7982377a.bundle.min.js&quot;&gt;(()=&gt;{&quot;use strict&quot;;const{o&quot;, see evidence field for the suspicious comment/snippet.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>2</count>
+						<solution>&lt;p&gt;Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;The following pattern was used: \bDEBUG\b and was detected 2 times, the first in likely comment: &quot;//static.parastorage.com/services/wix-thunderbolt/dist/webpack-runtime.7ea34ff4.bundle.min.js&quot;&gt;(()=&gt;{&quot;use strict&quot;;var e,o,a,r,t,&quot;, see evidence field for the suspicious comment/snippet.&lt;/p&gt;</otherinfo>
+						<reference></reference>
+						<cweid>615</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10109</pluginid>
+						<alertRef>10109</alertRef>
+						<alert>Modern Web Application</alert>
+						<name>Modern Web Application</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>&lt;a data-testid=&quot;linkElement&quot; href=&quot;https://www.visionhockey701.com&quot; target=&quot;_self&quot; class=&quot;j7pOnl&quot;&gt;&lt;wow-image id=&quot;img_comp-jt9mjyua&quot; class=&quot;HlRz5e BI8PVQ&quot; data-image-info=&quot;{&amp;quot;containerId&amp;quot;:&amp;quot;comp-jt9mjyua&amp;quot;,&amp;quot;displayMode&amp;quot;:&amp;quot;fill&amp;quot;,&amp;quot;targetWidth&amp;quot;:434,&amp;quot;targetHeight&amp;quot;:85,&amp;quot;isLQIP&amp;quot;:false,&amp;quot;encoding&amp;quot;:&amp;quot;AVIF&amp;quot;,&amp;quot;imageData&amp;quot;:{&amp;quot;width&amp;quot;:434,&amp;quot;height&amp;quot;:86,&amp;quot;uri&amp;quot;:&amp;quot;c0c114_e82fe208e2ac4f21a6a5cbdcb22764d0~mv2.png&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;vision-hockey-logo2.png&amp;quot;,&amp;quot;displayMode&amp;quot;:&amp;quot;fill&amp;quot;}}&quot; data-motion-part=&quot;BG_IMG comp-jt9mjyua&quot; data-bg-effect-name=&quot;&quot; data-has-ssr-src=&quot;&quot;&gt;&lt;img src=&quot;https://static.wixstatic.com/media/c0c114_e82fe208e2ac4f21a6a5cbdcb22764d0~mv2.png/v1/fill/w_434,h_85,al_c,q_85,enc_avif,quality_auto/vision-hockey-logo2.png&quot; alt=&quot;vision-hockey-logo2.png&quot; style=&quot;width:434px;height:85px;object-fit:cover&quot; width=&quot;434&quot; height=&quot;85&quot; srcSet=&quot;https://static.wixstatic.com/media/c0c114_e82fe208e2ac4f21a6a5cbdcb22764d0~mv2.png/v1/fill/w_434,h_85,al_c,q_85,enc_avif,quality_auto/vision-hockey-logo2.png 1x, https://static.wixstatic.com/media/c0c114_e82fe208e2ac4f21a6a5cbdcb22764d0~mv2.png/v1/fill/w_608,h_119,al_c,lg_1,q_85,enc_avif,quality_auto/vision-hockey-logo2.png 2x&quot; fetchpriority=&quot;high&quot;/&gt;&lt;/wow-image&gt;&lt;/a&gt;</evidence>
+									<otherinfo>Links have been found with a target of &apos;_self&apos; - this is often used by modern frameworks to force a full page reload.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;This is an informational alert and so no changes are required.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;Links have been found with a target of &apos;_self&apos; - this is often used by modern frameworks to force a full page reload.&lt;/p&gt;</otherinfo>
+						<reference></reference>
+						<cweid>-1</cweid>
+						<wascid>-1</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10015</pluginid>
+						<alertRef>10015</alertRef>
+						<alert>Re-examine Cache-control Directives</alert>
+						<name>Re-examine Cache-control Directives</name>
+						<riskcode>0</riskcode>
+						<confidence>1</confidence>
+						<riskdesc>Informational (Low)</riskdesc>
+						<confidencedesc>Low</confidencedesc>
+						<desc>&lt;p&gt;The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>cache-control</param>
+									<attack></attack>
+									<evidence>public,max-age=0,must-revalidate</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;For secure content, ensure the cache-control HTTP header is set with &quot;no-cache, no-store, must-revalidate&quot;. If an asset should be cached consider setting the directives &quot;public, max-age, immutable&quot;.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#web-content-caching&lt;/p&gt;&lt;p&gt;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control&lt;/p&gt;&lt;p&gt;https://grayduck.mn/2021/09/13/cache-control-recommendations/&lt;/p&gt;</reference>
+						<cweid>525</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10050</pluginid>
+						<alertRef>10050-2</alertRef>
+						<alert>Retrieved from Cache</alert>
+						<name>Retrieved from Cache</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as &quot;proxy&quot; caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>Age: 1279</evidence>
+									<otherinfo>The presence of the &apos;Age&apos; header indicates that a HTTP/1.1 compliant caching server is in use.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:&lt;/p&gt;&lt;p&gt;Cache-Control: no-cache, no-store, must-revalidate, private&lt;/p&gt;&lt;p&gt;Pragma: no-cache&lt;/p&gt;&lt;p&gt;Expires: 0&lt;/p&gt;&lt;p&gt;This configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;The presence of the &apos;Age&apos; header indicates that a HTTP/1.1 compliant caching server is in use.&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://tools.ietf.org/html/rfc7234&lt;/p&gt;&lt;p&gt;https://tools.ietf.org/html/rfc7231&lt;/p&gt;&lt;p&gt;https://www.rfc-editor.org/rfc/rfc9110.html&lt;/p&gt;</reference>
+						<cweid>-1</cweid>
+						<wascid>-1</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10112</pluginid>
+						<alertRef>10112</alertRef>
+						<alert>Session Management Response Identified</alert>
+						<name>Session Management Response Identified</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The given response has been identified as containing a session management token. The &apos;Other Info&apos; field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to &quot;Auto-Detect&quot; then this rule will change the session management to use the tokens identified.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>ssr-caching</param>
+									<attack></attack>
+									<evidence>cache#desc=hit#varnish=hit_miss#dc#desc=fastly_virginia-pub_g</evidence>
+									<otherinfo>
+cookie:ssr-caching</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;This is an informational alert rather than a vulnerability and so there is nothing to fix.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;&lt;/p&gt;&lt;p&gt;cookie:ssr-caching&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://www.zaproxy.org/docs/desktop/addons/authentication-helper/session-mgmt-id&lt;/p&gt;</reference>
+						<cweid>-1</cweid>
+						<wascid>-1</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10049</pluginid>
+						<alertRef>10049</alertRef>
+						<alert>Storable and Cacheable Content</alert>
+						<name>Storable and Cacheable Content</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The response contents are storable by caching components such as proxy servers, and may be retrieved directly from the cache, rather than from the origin server by the caching servers, in response to similar requests from other users. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where &quot;shared&quot; caching servers such as &quot;proxy&quot; caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo>The response is stale, and stale responses are not configured to be re-validated or blocked, using the &apos;must-revalidate&apos;, &apos;proxy-revalidate&apos;, &apos;s-maxage&apos;, or &apos;max-age&apos; response &apos;Cache-Control&apos; directives.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:&lt;/p&gt;&lt;p&gt;Cache-Control: no-cache, no-store, must-revalidate, private&lt;/p&gt;&lt;p&gt;Pragma: no-cache&lt;/p&gt;&lt;p&gt;Expires: 0&lt;/p&gt;&lt;p&gt;This configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;The response is stale, and stale responses are not configured to be re-validated or blocked, using the &apos;must-revalidate&apos;, &apos;proxy-revalidate&apos;, &apos;s-maxage&apos;, or &apos;max-age&apos; response &apos;Cache-Control&apos; directives.&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7234&lt;/p&gt;&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7231&lt;/p&gt;&lt;p&gt;https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html&lt;/p&gt;</reference>
+						<cweid>524</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10104</pluginid>
+						<alertRef>10104</alertRef>
+						<alert>User Agent Fuzzer</alert>
+						<name>User Agent Fuzzer</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;Check for differences in response based on fuzzed User Agent (eg. mobile sites, access as a Search Engine Crawler). Compares the response statuscode and the hashcode of the response body with the original response.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>Header User-Agent</param>
+									<attack>Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>Header User-Agent</param>
+									<attack>Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)</attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>Header User-Agent</param>
+									<attack>Mozilla/5.0 (iPhone; CPU iPhone OS 8_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12A366 Safari/600.1.4</attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>Header User-Agent</param>
+									<attack>Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16</attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://www.visionhockey701.com</uri>
+									<method>GET</method>
+									<param>Header User-Agent</param>
+									<attack>msnbot/1.1 (+http://search.msn.com/msnbot.htm)</attack>
+									<evidence></evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>5</count>
+						<solution></solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://owasp.org/wstg&lt;/p&gt;</reference>
+						<cweid>0</cweid>
+						<wascid>0</wascid>
+						<sourceid>966</sourceid>
+					</alertitem>
+				
+			</alerts>
+		</site>
+	
+</OWASPZAPReport>
