@@ -11,65 +11,58 @@ Use our PowerShell script for a simple one-command scan:
 ```
 
 This will:
-1. Set up the complete Greenbone Vulnerability Management stack (with PostgreSQL and Redis)
+1. Set up the OpenVAS container (using immauss/openvas:latest which includes all components)
 2. Run a complete scan against the target URL
 3. Generate reports in the `reports` directory
 4. Open the web interface for viewing detailed results
-5. Stop the containers when finished (unless you specify `-keepContainerRunning`)
+5. Stop the container when finished (unless you specify `-keepContainerRunning`)
 
 ## Manual Method
 
 If you prefer to run the steps manually, here are the commands:
 
-### 1. Create a Network for the Containers
+### 1. Start the OpenVAS Container
 
 ```powershell
-docker network create greenbone-network
+# Start the OpenVAS all-in-one container
+docker run -d --name openvas \
+  -p 443:443 \
+  -e PUBLIC_HOSTNAME="localhost" \
+  -e ADMIN_PASSWORD="admin" \
+  -v ./reports:/reports \
+  immauss/openvas:latest
 ```
 
-### 2. Start the Required Containers
+### 2. Wait for the System to Initialize
 
-```powershell
-# PostgreSQL database
-docker run -d --name gvm-postgres --network=greenbone-network -e POSTGRES_PASSWORD=postgres -v gvm-postgres-data:/var/lib/postgresql/data postgres:15
-
-# Redis for scan engine
-docker run -d --name gvm-redis --network=greenbone-network -v gvm-redis-socket:/run/redis/ redis:7
-
-# Main Greenbone Vulnerability Manager
-docker run -d --name greenbone-vulnerability-manager --network=greenbone-network -p 9392:9392 -p 5432:5432 -v greenbone-community-data:/data -v ./reports:/reports greenbone/vulnerability-manager
-```
-
-### 3. Wait for the System to Initialize
-
-The Greenbone system needs time to initialize, especially on first run:
+The OpenVAS system needs time to initialize, especially on first run:
 
 ```powershell
 # Wait at least 5-10 minutes for first-time initialization
 ```
 
-### 4. Access the Web Interface
+### 3. Access the Web Interface
 
 Once initialized, you can access the web interface at:
 
 ```
-https://localhost:9392
+https://localhost:443
 ```
 
 Default credentials:
 - Username: `admin`
 - Password: `admin`
 
-### 5. Run the Python Scanner
+### 4. Run the Python Scanner
 
 ```powershell
 python container_documentation/openvas_test.py https://example.com
 ```
 
-### 6. Stop the Containers When Done
+### 5. Stop the Container When Done
 
 ```powershell
-docker stop greenbone-vulnerability-manager gvm-postgres gvm-redis
+docker stop openvas
 ```
 
 ## Understanding the Reports
@@ -81,17 +74,19 @@ Reports are saved in the `reports` directory with names like:
 - `openvas_report_example.com_2023-04-01_12-34-56.pdf` - PDF report for documentation
 - `openvas_report_example.com_2023-04-01_12-34-56.log` - Scan log with detailed scanner activity
 
-You can also access more detailed reports through the web interface at https://localhost:9392.
+You can also access more detailed reports through the web interface at https://localhost:443.
 
-## System Architecture
+## About the immauss/openvas Container
 
-The Greenbone Vulnerability Management system consists of several components:
+The `immauss/openvas` container is an all-in-one solution that includes:
 
 1. **Greenbone Vulnerability Manager (GVM)**: The core management service
-2. **PostgreSQL**: Database for storing vulnerability data and scan results
+2. **PostgreSQL**: Database for storing vulnerability data and scan results 
 3. **OpenVAS Scanner**: The actual scanning engine
 4. **Redis**: Used for caching and message passing between components
 5. **Greenbone Security Assistant (GSA)**: Web interface for managing scans and viewing reports
+
+All components are pre-configured and ready to use in a single container, which greatly simplifies the setup compared to using separate containers.
 
 ## Troubleshooting
 
@@ -101,23 +96,28 @@ If you encounter issues:
 
 2. **Web Interface Not Available**: Check container status:
    ```powershell
-   docker ps -a | findstr greenbone
+   docker ps -a | findstr openvas
    ```
 
 3. **View Container Logs**:
    ```powershell
-   docker logs greenbone-vulnerability-manager
+   docker logs openvas
    ```
 
-4. **Network Issues**: Make sure ports 9392 and 5432 are not in use by other applications.
+4. **Network Issues**: Make sure port 443 is not in use by other applications.
 
-5. **Container Volumes**: If data seems to be missing after restarts, check your Docker volumes:
+5. **Container Storage**: If you need to preserve scan data between container restarts, mount a persistent volume:
    ```powershell
-   docker volume ls | findstr greenbone
+   docker run -d --name openvas -p 443:443 -v openvas-data:/data -v ./reports:/reports immauss/openvas:latest
    ```
 
-6. **Reset Installation**: If you need to start fresh, remove the containers and volumes:
+6. **Reset Installation**: If you need to start fresh, remove the container and volumes:
    ```powershell
-   docker rm -f gvm-postgres gvm-redis greenbone-vulnerability-manager
-   docker volume rm gvm-postgres-data gvm-redis-socket greenbone-community-data
+   docker rm -f openvas
+   docker volume rm openvas-data
    ```
+
+7. **"Could not connect to server" Error**: This is normal during initialization. Wait for the database and services to fully start.
+
+8. **Limited Resources**: The container requires significant resources. Ensure Docker has at least 4GB of memory allocated:
+   - Windows/Mac: Docker Desktop Settings → Resources → Memory

@@ -28,84 +28,62 @@ try {
     exit 1
 }
 
-# Create docker network if it doesn't exist
-Write-Host "Setting up Docker network for OpenVAS..."
-docker network create greenbone-network 2>$null
+# Remove existing OpenVAS container if it exists
+Write-Host "Removing any existing OpenVAS container..."
+docker rm -f openvas 2>$null
 
-# Remove existing Greenbone containers if they exist
-Write-Host "Removing any existing Greenbone containers..."
-docker rm -f gvm-postgres gvm-redis greenbone-vulnerability-manager gvmd ospd-openvas notus-scanner 2>$null
-
-# Set up PostgreSQL container for GVM
-Write-Host "Setting up PostgreSQL container for GVM..."
-docker run -d --name gvm-postgres `
-    --network=greenbone-network `
-    -e POSTGRES_PASSWORD=postgres `
-    -v gvm-postgres-data:/var/lib/postgresql/data `
-    -d postgres:15
-
-# Set up Redis container for OSPD
-Write-Host "Setting up Redis container for OSPD..."
-docker run -d --name gvm-redis `
-    --network=greenbone-network `
-    -v gvm-redis-socket:/run/redis/ `
-    -d redis:7
-
-# Start main Greenbone Vulnerability Manager container
-Write-Host "Starting Greenbone Vulnerability Manager..."
-docker run -d --name greenbone-vulnerability-manager `
-    --network=greenbone-network `
-    -p 9392:9392 `
-    -p 5432:5432 `
-    -e GREENBONE_SECURITY_MANAGER_LOG_LEVEL=INFO `
-    -v greenbone-community-data:/data `
+# Start the OpenVAS container
+Write-Host "Starting OpenVAS container (immauss/openvas:latest)..."
+docker run -d --name openvas `
+    -p 443:443 -p 9392:9392 `
+    -e PUBLIC_HOSTNAME="localhost" `
+    -e ADMIN_PASSWORD="admin" `
     -v "${PWD}/reports:/reports" `
-    --restart unless-stopped `
-    greenbone/vulnerability-manager
+    immauss/openvas:latest
 
-# Wait for GVM to start
-Write-Host "Waiting for Greenbone Vulnerability Manager to start..."
+# Wait for OpenVAS to start
+Write-Host "Waiting for OpenVAS to initialize..."
 Write-Host "This will take some time on first run as it initializes the vulnerability database..."
 Start-Sleep -Seconds 60  # Initial wait time
 
-# Check if GVM is running
-Write-Host "Checking if Greenbone Vulnerability Manager is running..."
-$gvmRunning = $false
+# Check if OpenVAS is running
+Write-Host "Checking if OpenVAS is running..."
+$openvasRunning = $false
 $retry = 0
 $maxRetries = 30  # 30 retries × 30 seconds = 15 minutes max wait time
 
-while (-not $gvmRunning -and $retry -lt $maxRetries) {
+while (-not $openvasRunning -and $retry -lt $maxRetries) {
     try {
-        $response = Invoke-WebRequest -Uri "https://localhost:9392" -SkipCertificateCheck -TimeoutSec 5
+        $response = Invoke-WebRequest -Uri "https://localhost:443" -SkipCertificateCheck -TimeoutSec 5
         if ($response.StatusCode -eq 200) {
-            $gvmRunning = $true
-            Write-Host "Greenbone Vulnerability Manager is running!"
+            $openvasRunning = $true
+            Write-Host "OpenVAS is running!"
         } else {
-            Write-Host "GVM not fully initialized yet. Waiting 30 more seconds (try $retry of $maxRetries)..."
+            Write-Host "OpenVAS not fully initialized yet. Waiting 30 more seconds (try $retry of $maxRetries)..."
             Start-Sleep -Seconds 30
             $retry++
         }
     } catch {
-        Write-Host "GVM not ready yet. Waiting 30 more seconds (try $retry of $maxRetries)..."
+        Write-Host "OpenVAS not ready yet. Waiting 30 more seconds (try $retry of $maxRetries)..."
         Start-Sleep -Seconds 30
         $retry++
     }
 }
 
-if (-not $gvmRunning) {
-    Write-Host "Failed to confirm GVM is running. Checking container logs..."
-    docker logs greenbone-vulnerability-manager
+if (-not $openvasRunning) {
+    Write-Host "Failed to confirm OpenVAS is running. Checking container logs..."
+    docker logs openvas
     Write-Host "Container status:"
-    docker ps -a | findstr "greenbone"
-    Write-Host "You may need to wait longer for GVM to initialize on first run, or there may be issues with the setup."
+    docker ps -a | findstr "openvas"
+    Write-Host "You may need to wait longer for OpenVAS to initialize on first run, or there may be issues with the setup."
     
     # Ask user if they want to continue
     $continue = Read-Host "Do you want to continue with the scan attempt anyway? (y/n)"
     if ($continue -ne "y") {
-        # Stop containers if requested
+        # Stop container if requested
         if (-not $keepContainerRunning) {
-            Write-Host "Stopping containers..."
-            docker stop greenbone-vulnerability-manager gvm-postgres gvm-redis
+            Write-Host "Stopping container..."
+            docker stop openvas
         }
         exit 1
     }
@@ -124,6 +102,12 @@ try {
     py -m pip install requests urllib3
 }
 
+# Update the API configuration for the openvas_test.py script
+Write-Host "Updating API configuration for scan script..."
+$content = Get-Content container_documentation/openvas_test.py
+$content = $content -replace "GVM_PORT = .+", "GVM_PORT = `"443`""
+Set-Content container_documentation/openvas_test.py $content
+
 # Run the scan
 Write-Host "Starting vulnerability scan against $targetUrl..."
 py container_documentation/openvas_test.py "$targetUrl"
@@ -132,18 +116,18 @@ py container_documentation/openvas_test.py "$targetUrl"
 Write-Host "`nScan completed! Check the generated reports."
 Write-Host "Reports are saved in the 'reports' directory with names starting with 'openvas_report_'"
 
-# Open browser to Greenbone Security Assistant web interface
-Write-Host "Opening Greenbone Security Assistant web interface..."
+# Open browser to OpenVAS web interface
+Write-Host "Opening OpenVAS web interface..."
 Write-Host "Default credentials: admin / admin"
-Start-Process "https://localhost:9392"
+Start-Process "https://localhost:443"
 
-# Stop the containers by default unless -keepContainerRunning is specified
+# Stop the container by default unless -keepContainerRunning is specified
 if (-not $keepContainerRunning) {
-    Write-Host "Stopping Greenbone containers..."
-    docker stop greenbone-vulnerability-manager gvm-postgres gvm-redis
-    Write-Host "Greenbone containers stopped."
+    Write-Host "Stopping OpenVAS container..."
+    docker stop openvas
+    Write-Host "OpenVAS container stopped."
 } else {
-    Write-Host "Greenbone containers are still running."
-    Write-Host "Browse to https://localhost:9392 to access the web interface."
-    Write-Host "Stop them manually when done with: docker stop greenbone-vulnerability-manager gvm-postgres gvm-redis"
+    Write-Host "OpenVAS container is still running."
+    Write-Host "Browse to https://localhost:443 to access the web interface."
+    Write-Host "Stop it manually when done with: docker stop openvas"
 } 
