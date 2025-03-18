@@ -24,7 +24,7 @@ This will:
 
 ## Reports
 
-Reports are saved in the project root with names starting with `zap_report_` and include:
+Reports are saved in the `reports` directory with names starting with `zap_report_` and include:
 - A JSON report (for programmatic analysis)
 - An XML report (for integration with other tools)
 - An HTML report (for human-readable results)
@@ -59,6 +59,7 @@ If you encounter issues:
 3. Ensure the URL has the correct format (http:// or https://)
 4. Check container status: `docker ps -a | findstr zap`
 5. The correct mount path for zaproxy/zap-weekly is `/home/zap/wrk` (not `/zap/wrk`)
+6. If targets aren't being found by ZAP, reports will still be generated with available information
 
 ## For AWS Fargate Deployment
 

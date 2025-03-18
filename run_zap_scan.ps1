@@ -11,6 +11,12 @@ if (-not ($targetUrl -match "^https?://")) {
     $targetUrl = "http://$targetUrl"
 }
 
+# Create reports directory if it doesn't exist
+if (-not (Test-Path -Path "reports")) {
+    Write-Host "Creating reports directory..."
+    New-Item -Path "reports" -ItemType Directory | Out-Null
+}
+
 # Check if Docker is running
 try {
     docker info | Out-Null
@@ -87,7 +93,7 @@ py container_documentation/zaproxy_test.py
 
 # Output results location
 Write-Host "`nScan completed! Check the generated reports."
-Write-Host "Reports are saved in the current directory with names starting with 'zap_report_'"
+Write-Host "Reports are saved in the 'reports' directory with names starting with 'zap_report_'"
 
 # Offer to stop the ZAP container
 $stopContainer = Read-Host "Do you want to stop the ZAP container? (y/n)"
