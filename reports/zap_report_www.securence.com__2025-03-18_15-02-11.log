@@ -1,0 +1,113 @@
+Scan started at 2025-03-18 15:02:11 for target: https://www.securence.com/
+2025-03-18 15:02:11 - Starting a fresh ZAP session to clear old scan data...
+2025-03-18 15:02:11 - Available contexts: ['Default Context']
+2025-03-18 15:02:11 - Created new context: Context_2025-03-18_15-02-11
+2025-03-18 15:02:11 - Included target in context: https://www.securence.com/
+2025-03-18 15:02:11 - Checking if target https://www.securence.com/ is in the Sites tree...
+2025-03-18 15:02:11 - Directly accessing https://www.securence.com/ to help with discovery...
+2025-03-18 15:02:11 - Trying direct HTTP request first...
+2025-03-18 15:02:12 - Direct HTTP request status: 200
+2025-03-18 15:02:12 - Successfully accessed https://www.securence.com/ via ZAP
+2025-03-18 15:02:17 - Sites in ZAP: ['https://www.securence.com']
+2025-03-18 15:02:17 - Target https://www.securence.com/ not found in Sites tree. Trying alternative approaches...
+2025-03-18 15:02:17 - Trying alternative protocol: http://www.securence.com/
+2025-03-18 15:02:17 - Starting AJAX Spider on https://www.securence.com/...
+2025-03-18 15:02:17 - AJAX Spider status: running
+2025-03-18 15:02:22 - AJAX Spider status: running
+2025-03-18 15:02:27 - AJAX Spider status: running
+2025-03-18 15:02:32 - AJAX Spider status: running
+2025-03-18 15:02:37 - AJAX Spider status: running
+2025-03-18 15:02:42 - AJAX Spider status: running
+2025-03-18 15:02:47 - AJAX Spider status: running
+2025-03-18 15:02:52 - AJAX Spider status: running
+2025-03-18 15:02:57 - AJAX Spider status: running
+2025-03-18 15:03:02 - AJAX Spider status: running
+2025-03-18 15:03:07 - AJAX Spider status: running
+2025-03-18 15:03:12 - AJAX Spider status: running
+2025-03-18 15:03:17 - AJAX Spider status: running
+2025-03-18 15:03:22 - AJAX Spider status: running
+2025-03-18 15:03:27 - AJAX Spider status: running
+2025-03-18 15:03:32 - AJAX Spider status: running
+2025-03-18 15:03:37 - AJAX Spider status: running
+2025-03-18 15:03:42 - AJAX Spider status: running
+2025-03-18 15:03:47 - AJAX Spider status: running
+2025-03-18 15:03:52 - AJAX Spider status: running
+2025-03-18 15:03:57 - AJAX Spider status: running
+2025-03-18 15:04:02 - AJAX Spider status: running
+2025-03-18 15:04:07 - AJAX Spider status: running
+2025-03-18 15:04:12 - AJAX Spider status: running
+2025-03-18 15:04:17 - AJAX Spider completed or timed out
+2025-03-18 15:04:17 - Starting Spider scan on https://www.securence.com/...
+2025-03-18 15:04:17 - Spider progress: 0%
+2025-03-18 15:04:22 - Spider progress: 63%
+2025-03-18 15:04:27 - Spider scan completed or timed out!
+2025-03-18 15:04:27 - Rechecking for target in sites...
+2025-03-18 15:04:27 - Checking for domain: www.securence.com
+2025-03-18 15:04:27 - Found related site in tree: http://www.securence.com
+2025-03-18 15:04:27 - Starting Active Scan for http://www.securence.com...
+2025-03-18 15:04:27 - Active Scan started: 0
+2025-03-18 15:04:27 - Active Scan progress: 0%
+2025-03-18 15:04:33 - Active Scan progress: 0%
+2025-03-18 15:04:38 - Active Scan progress: 1%
+2025-03-18 15:04:43 - Active Scan progress: 6%
+2025-03-18 15:04:48 - Active Scan progress: 6%
+2025-03-18 15:04:53 - Active Scan progress: 6%
+2025-03-18 15:04:58 - Active Scan progress: 6%
+2025-03-18 15:05:03 - Active Scan progress: 7%
+2025-03-18 15:05:08 - Active Scan progress: 7%
+2025-03-18 15:05:13 - Active Scan progress: 7%
+2025-03-18 15:05:18 - Active Scan progress: 7%
+2025-03-18 15:05:23 - Active Scan progress: 7%
+2025-03-18 15:05:28 - Active Scan progress: 7%
+2025-03-18 15:05:33 - Active Scan progress: 7%
+2025-03-18 15:05:38 - Active Scan progress: 7%
+2025-03-18 15:05:43 - Active Scan progress: 7%
+2025-03-18 15:05:48 - Active Scan progress: 7%
+2025-03-18 15:05:53 - Active Scan progress: 7%
+2025-03-18 15:05:58 - Active Scan progress: 7%
+2025-03-18 15:06:03 - Active Scan progress: 7%
+2025-03-18 15:06:08 - Active Scan progress: 7%
+2025-03-18 15:06:13 - Active Scan progress: 7%
+2025-03-18 15:06:18 - Active Scan progress: 7%
+2025-03-18 15:06:23 - Active Scan progress: 7%
+2025-03-18 15:06:28 - Active Scan progress: 7%
+2025-03-18 15:06:33 - Active Scan progress: 7%
+2025-03-18 15:06:38 - Active Scan progress: 7%
+2025-03-18 15:06:43 - Active Scan progress: 7%
+2025-03-18 15:06:48 - Active Scan progress: 7%
+2025-03-18 15:06:53 - Active Scan progress: 7%
+2025-03-18 15:06:58 - Active Scan progress: 7%
+2025-03-18 15:07:03 - Active Scan progress: 7%
+2025-03-18 15:07:08 - Active Scan progress: 7%
+2025-03-18 15:07:13 - Active Scan progress: 7%
+2025-03-18 15:07:18 - Active Scan progress: 7%
+2025-03-18 15:07:23 - Active Scan progress: 7%
+2025-03-18 15:07:28 - Active Scan progress: 7%
+2025-03-18 15:07:33 - Active Scan progress: 7%
+2025-03-18 15:07:38 - Active Scan progress: 7%
+2025-03-18 15:07:43 - Active Scan progress: 7%
+2025-03-18 15:07:48 - Active Scan progress: 7%
+2025-03-18 15:07:53 - Active Scan progress: 7%
+2025-03-18 15:07:58 - Active Scan progress: 7%
+2025-03-18 15:08:03 - Active Scan progress: 7%
+2025-03-18 15:08:08 - Active Scan progress: 7%
+2025-03-18 15:08:13 - Active Scan progress: 7%
+2025-03-18 15:08:18 - Active Scan progress: 7%
+2025-03-18 15:08:23 - Active Scan progress: 7%
+2025-03-18 15:08:28 - Active Scan progress: 7%
+2025-03-18 15:08:33 - Active Scan progress: 7%
+2025-03-18 15:08:38 - Active Scan progress: 7%
+2025-03-18 15:08:43 - Active Scan progress: 7%
+2025-03-18 15:08:48 - Active Scan progress: 7%
+2025-03-18 15:08:53 - Active Scan progress: 7%
+2025-03-18 15:08:58 - Active Scan progress: 7%
+2025-03-18 15:09:03 - Active Scan progress: 7%
+2025-03-18 15:09:08 - Active Scan progress: 7%
+2025-03-18 15:09:13 - Active Scan progress: 7%
+2025-03-18 15:09:18 - Active Scan progress: 7%
+2025-03-18 15:09:23 - Active Scan progress: 7%
+2025-03-18 15:09:28 - Active Scan completed or timed out!
+2025-03-18 15:09:42 - Found 90 alerts for http://www.securence.com
+2025-03-18 15:09:44 - Generated XML report with scan data
+2025-03-18 15:09:46 - Generated HTML report with scan data
+2025-03-18 15:09:46 - All reports generated and saved to the 'reports' directory.
