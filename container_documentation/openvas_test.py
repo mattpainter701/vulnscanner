@@ -12,16 +12,16 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Parse command line arguments
-parser = argparse.ArgumentParser(description='OpenVAS Vulnerability Scanner')
+parser = argparse.ArgumentParser(description='Greenbone Vulnerability Manager Scanner')
 parser.add_argument('target', help='Target to scan (e.g., https://example.com or 192.168.1.1)')
 args = parser.parse_args()
 
-# OpenVAS API Configuration
-OPENVAS_HOST = "localhost"
-OPENVAS_PORT = "9392"
-OPENVAS_USER = "admin"
-OPENVAS_PASSWORD = "admin"
-OPENVAS_URL = f"https://{OPENVAS_HOST}:{OPENVAS_PORT}"
+# GVM API Configuration
+GVM_HOST = "localhost"
+GVM_PORT = "9392"
+GVM_USER = "admin"
+GVM_PASSWORD = "admin"
+GVM_URL = f"https://{GVM_HOST}:{GVM_PORT}"
 
 # Target to scan - from command line argument
 target = args.target
@@ -58,16 +58,25 @@ def log_event(message):
 with open(log_file_path, "w") as f:
     f.write(f"Scan started at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} for target: {target}\n")
 
-# Function to make API requests to GSA (Greenbone Security Assistant)
+# Test if web interface is responding
+def test_web_interface():
+    try:
+        response = requests.get(GVM_URL, verify=False, timeout=10)
+        return response.status_code == 200
+    except Exception as e:
+        log_event(f"Error connecting to web interface: {str(e)}")
+        return False
+
+# Function to make API requests to GVM
 def gvm_request(endpoint, method="GET", data=None, params=None):
-    url = f"{OPENVAS_URL}/gmp{endpoint}"
+    url = f"{GVM_URL}/gmp{endpoint}"
     headers = {"Content-Type": "application/xml"}
     try:
         if method == "GET":
-            response = requests.get(url, auth=(OPENVAS_USER, OPENVAS_PASSWORD), params=params, 
+            response = requests.get(url, auth=(GVM_USER, GVM_PASSWORD), params=params, 
                                     headers=headers, verify=False, timeout=30)
         else:
-            response = requests.post(url, auth=(OPENVAS_USER, OPENVAS_PASSWORD), data=data, 
+            response = requests.post(url, auth=(GVM_USER, GVM_PASSWORD), data=data, 
                                      headers=headers, verify=False, timeout=30)
         
         if response.status_code >= 400:
@@ -114,7 +123,7 @@ def generate_reports(scan_id=None, report_id=None, note=""):
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>OpenVAS Scan Report - {target}</title>
+                    <title>GVM Scan Report - {target}</title>
                     <style>
                         body {{ font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }}
                         .container {{ max-width: 1000px; margin: 0 auto; }}
@@ -127,7 +136,7 @@ def generate_reports(scan_id=None, report_id=None, note=""):
                 <body>
                     <div class="container">
                         <div class="header">
-                            <h1>OpenVAS Vulnerability Scan Report</h1>
+                            <h1>Greenbone Vulnerability Scan Report</h1>
                             <h2>{target}</h2>
                             <p>Scan Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
                         </div>
@@ -136,9 +145,9 @@ def generate_reports(scan_id=None, report_id=None, note=""):
                                 <h3>Scan Error</h3>
                                 <p><strong>Status:</strong> Failed to perform scan</p>
                                 <p><strong>Target:</strong> {target}</p>
-                                <p><strong>Note:</strong> {note if note else "No scan was performed. There may be an issue with the OpenVAS server or connection."}</p>
+                                <p><strong>Note:</strong> {note if note else "No scan was performed. There may be an issue with the GVM server or connection."}</p>
                             </div>
-                            
+                            <p>Please access the full report via the web interface at https://localhost:9392</p>
                             <h3>Scan Log</h3>
                             <div class="log">
                                 {"<br>".join(scan_log)}
@@ -238,10 +247,14 @@ def generate_reports(scan_id=None, report_id=None, note=""):
                         with open(pdf_report_path, "wb") as f:
                             f.write(pdf_report.encode('latin1'))
                         log_event(f"Saved PDF report to {pdf_report_path}")
+                
+                log_event("All reports generated successfully - also available via web interface at https://localhost:9392")
             else:
                 log_event("No report ID available, cannot generate detailed reports")
+                log_event("You can access reports via the web interface at https://localhost:9392")
         else:
             log_event("Could not retrieve report formats")
+            log_event("You can access reports via the web interface at https://localhost:9392")
     
     except Exception as e:
         log_event(f"Error generating reports: {str(e)}")
@@ -251,18 +264,19 @@ def generate_reports(scan_id=None, report_id=None, note=""):
             <!DOCTYPE html>
             <html>
             <head>
-                <title>OpenVAS Scan Report - {target}</title>
+                <title>GVM Scan Report - {target}</title>
                 <style>
                     body {{ font-family: Arial, sans-serif; margin: 20px; }}
                     .error {{ color: red; }}
                 </style>
             </head>
             <body>
-                <h1>OpenVAS Scan Report - Error</h1>
+                <h1>Greenbone Vulnerability Manager Scan Report - Error</h1>
                 <p><strong>Target:</strong> {target}</p>
                 <p><strong>Timestamp:</strong> {timestamp}</p>
                 <p class="error"><strong>Status:</strong> Report generation error</p>
                 <p><strong>Error:</strong> {str(e)}</p>
+                <p>You can access any available reports via the web interface at https://localhost:9392</p>
                 <h3>Scan Log</h3>
                 <pre>{os.linesep.join(scan_log)}</pre>
             </body>
@@ -271,25 +285,31 @@ def generate_reports(scan_id=None, report_id=None, note=""):
         log_event(f"Generated minimal HTML error report due to exception: {e}")
 
 # Main scanning function
-def run_openvas_scan():
-    # Test connection to OpenVAS
-    log_event("Testing connection to OpenVAS...")
+def run_gvm_scan():
+    # Check if web interface is responding
+    if not test_web_interface():
+        log_event("Web interface is not responding. Check container status.")
+        generate_reports(note="Failed to connect to Greenbone Vulnerability Manager web interface")
+        return
+
+    # Test connection to GVM API
+    log_event("Testing connection to Greenbone Vulnerability Manager...")
     version_response = gvm_request("/get_version")
     if not version_response:
-        log_event("Failed to connect to OpenVAS. Please check that the server is running and credentials are correct.")
-        generate_reports(note="Failed to connect to OpenVAS server")
+        log_event("Failed to connect to GVM API. Please check that the server is running and credentials are correct.")
+        generate_reports(note="Failed to connect to GVM API")
         return
     
     try:
         version_root = ET.fromstring(version_response)
         version = version_root.find("version").text
-        log_event(f"Connected to OpenVAS (version {version})")
+        log_event(f"Connected to Greenbone Vulnerability Manager (version {version})")
     except Exception as e:
         log_event(f"Error parsing version response: {str(e)}")
-        log_event("Connected to OpenVAS but couldn't determine version")
+        log_event("Connected to GVM but couldn't determine version")
     
     # Create a target for scanning
-    log_event(f"Creating OpenVAS target for {target}")
+    log_event(f"Creating scan target for {target}")
     target_name = f"Python_Scan_{timestamp}"
     
     # Extract hostname/IP for target creation
@@ -298,8 +318,8 @@ def run_openvas_scan():
     
     target_response = gvm_request("", method="POST", data=target_data)
     if not target_response:
-        log_event("Failed to create target in OpenVAS")
-        generate_reports(note="Failed to create target in OpenVAS")
+        log_event("Failed to create target in GVM")
+        generate_reports(note="Failed to create target in GVM")
         return
     
     try:
@@ -419,11 +439,12 @@ def run_openvas_scan():
     generate_reports(scan_id=task_id, report_id=report_id)
     
     log_event("All tasks completed!")
+    log_event("You can access detailed reports and results via the web interface at https://localhost:9392")
 
 # Run the scan
 if __name__ == "__main__":
     try:
-        run_openvas_scan()
+        run_gvm_scan()
     except KeyboardInterrupt:
         log_event("Scan interrupted by user")
         sys.exit(1)
