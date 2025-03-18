@@ -10,7 +10,7 @@ ZAP_PROXY = "http://localhost:8080"
 zap = ZAPv2(apikey=API_KEY, proxies={'http': ZAP_PROXY, 'https': ZAP_PROXY})
 
 # Target to scan - MUST include http:// or https:// prefix
-target = "http://usi-mail06-mtka.usinternet.com"
+target = "https://usi-mail06-mtka.usinternet.com"
 
 # Generate timestamp for report naming
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -120,3 +120,4 @@ with open(html_report_path, "w", encoding="utf-8") as f:
 print(f"HTML Report saved: {html_report_path}")
 
 print("All reports generated successfully!")
+

@@ -23,25 +23,47 @@ try {
 Write-Host "Removing any existing ZAP containers..."
 docker rm -f zap 2>$null
 
-# Start ZAP container
+# Start ZAP container - Using the stable image instead of weekly
 Write-Host "Starting ZAP container..."
 docker run -d --name zap -p 8080:8080 `
-    -v "${PWD}:/zap" `
-    --network=bridge `
-    --entrypoint "/zap/zap.sh" `
-    zaproxy/zap-weekly -daemon -host 0.0.0.0 `
+    -v "${PWD}:/zap/wrk" `
+    owasp/zap2docker-stable zap.sh -daemon -host 0.0.0.0 `
     -config api.key=mysecretapikey `
     -config api.addrs.addr.name=.* `
     -config api.addrs.addr.regex=true
 
 # Wait for ZAP to start
 Write-Host "Waiting for ZAP to start..."
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 15  # Increased wait time
+
+# Check if ZAP is running
+Write-Host "Checking if ZAP is running..."
+$zapRunning = $false
+$retry = 0
+while (-not $zapRunning -and $retry -lt 3) {
+    try {
+        $response = Invoke-WebRequest -Uri "http://localhost:8080/JSON/core/view/version/?apikey=mysecretapikey" -TimeoutSec 5
+        if ($response.StatusCode -eq 200) {
+            $zapRunning = $true
+            Write-Host "ZAP is running!"
+        }
+    } catch {
+        Write-Host "ZAP not responding yet. Waiting 5 more seconds..."
+        Start-Sleep -Seconds 5
+        $retry++
+    }
+}
+
+if (-not $zapRunning) {
+    Write-Host "Failed to start ZAP. Checking container logs..."
+    docker logs zap
+    exit 1
+}
 
 # Update the target in the script
 Write-Host "Updating target in the scan script..."
 $scriptContent = Get-Content -Path "container_documentation/zaproxy_test.py" -Raw
-$scriptContent = $scriptContent -replace '(target = "https?://)[^"]*"', ('$1' + $targetUrl + '"')
+$scriptContent = $scriptContent -replace '(target = "https?://)[^"]*"', ('$1' + $targetUrl.Replace("http://", "").Replace("https://", "") + '"')
 Set-Content -Path "container_documentation/zaproxy_test.py" -Value $scriptContent
 
 # Install required Python packages if not already installed
