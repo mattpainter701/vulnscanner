@@ -14,17 +14,23 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # Parse command line arguments
 parser = argparse.ArgumentParser(description='OpenVAS Vulnerability Scanner')
 parser.add_argument('target', help='Target to scan (e.g., https://example.com or 192.168.1.1)')
+parser.add_argument('--retries', type=int, default=10, help='Number of retries for API connections')
+parser.add_argument('--retry-delay', type=int, default=30, help='Seconds to wait between retries')
 args = parser.parse_args()
 
 # OpenVAS API Configuration
 OPENVAS_HOST = "localhost"
-OPENVAS_PORT = "443"
+OPENVAS_PORT = "443"  # Will be dynamically updated by PowerShell script if needed
 OPENVAS_USER = "admin"
 OPENVAS_PASSWORD = "admin"
 OPENVAS_URL = f"https://{OPENVAS_HOST}:{OPENVAS_PORT}"
 
 # Target to scan - from command line argument
 target = args.target
+
+# Connection retry settings
+MAX_RETRIES = args.retries
+RETRY_DELAY = args.retry_delay
 
 # Ensure target is properly formatted
 if not target.startswith(('http://', 'https://')) and not all(c.isdigit() or c == '.' for c in target.split('.')):
@@ -58,35 +64,75 @@ def log_event(message):
 with open(log_file_path, "w") as f:
     f.write(f"Scan started at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} for target: {target}\n")
 
-# Test if web interface is responding
+# Test if web interface is responding with retry logic
 def test_web_interface():
-    try:
-        response = requests.get(OPENVAS_URL, verify=False, timeout=10)
-        return response.status_code == 200
-    except Exception as e:
-        log_event(f"Error connecting to web interface: {str(e)}")
-        return False
+    log_event(f"Testing connection to OpenVAS web interface at {OPENVAS_URL}")
+    
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = requests.get(OPENVAS_URL, verify=False, timeout=15)
+            if response.status_code == 200:
+                log_event(f"Successfully connected to OpenVAS web interface (attempt {attempt+1})")
+                return True
+            else:
+                log_event(f"Web interface returned status code {response.status_code} (attempt {attempt+1})")
+        except Exception as e:
+            log_event(f"Error connecting to web interface: {str(e)} (attempt {attempt+1})")
+            
+        if attempt < MAX_RETRIES - 1:
+            log_event(f"Retrying in {RETRY_DELAY} seconds...")
+            time.sleep(RETRY_DELAY)
+    
+    log_event(f"Failed to connect to web interface after {MAX_RETRIES} attempts")
+    return False
 
-# Function to make API requests to OpenVAS
+# Function to make API requests to OpenVAS with retry logic
 def openvas_request(endpoint, method="GET", data=None, params=None):
     url = f"{OPENVAS_URL}/gmp{endpoint}"
     headers = {"Content-Type": "application/xml"}
-    try:
-        if method == "GET":
-            response = requests.get(url, auth=(OPENVAS_USER, OPENVAS_PASSWORD), params=params, 
-                                    headers=headers, verify=False, timeout=30)
-        else:
-            response = requests.post(url, auth=(OPENVAS_USER, OPENVAS_PASSWORD), data=data, 
-                                     headers=headers, verify=False, timeout=30)
-        
-        if response.status_code >= 400:
-            log_event(f"API Error: {response.status_code} - {response.text}")
-            return None
-        
-        return response.text
-    except Exception as e:
-        log_event(f"Error making API request to {endpoint}: {str(e)}")
-        return None
+    
+    for attempt in range(MAX_RETRIES):
+        try:
+            if method == "GET":
+                response = requests.get(url, auth=(OPENVAS_USER, OPENVAS_PASSWORD), params=params, 
+                                        headers=headers, verify=False, timeout=30)
+            else:
+                response = requests.post(url, auth=(OPENVAS_USER, OPENVAS_PASSWORD), data=data, 
+                                        headers=headers, verify=False, timeout=30)
+            
+            if response.status_code >= 400:
+                log_event(f"API Error: {response.status_code} - {response.text} (attempt {attempt+1})")
+                if attempt < MAX_RETRIES - 1:
+                    log_event(f"Retrying in {RETRY_DELAY} seconds...")
+                    time.sleep(RETRY_DELAY)
+                    continue
+                return None
+            
+            return response.text
+        except Exception as e:
+            log_event(f"Error making API request to {endpoint}: {str(e)} (attempt {attempt+1})")
+            if attempt < MAX_RETRIES - 1:
+                log_event(f"Retrying in {RETRY_DELAY} seconds...")
+                time.sleep(RETRY_DELAY)
+    
+    return None
+
+# Try alternate port if default port fails
+def try_alternate_port():
+    global OPENVAS_PORT, OPENVAS_URL
+    
+    if OPENVAS_PORT == "443":
+        log_event("Trying alternate port 9392 instead of 443...")
+        OPENVAS_PORT = "9392"
+    else:
+        log_event("Trying standard port 443 instead of 9392...")
+        OPENVAS_PORT = "443"
+    
+    OPENVAS_URL = f"https://{OPENVAS_HOST}:{OPENVAS_PORT}"
+    log_event(f"Switched to URL: {OPENVAS_URL}")
+    
+    # Test the new connection
+    return test_web_interface()
 
 # Generate reports based on the scan results
 def generate_reports(scan_id=None, report_id=None, note=""):
@@ -288,12 +334,14 @@ def generate_reports(scan_id=None, report_id=None, note=""):
 def run_openvas_scan():
     # Check if web interface is responding
     if not test_web_interface():
-        log_event("Web interface is not responding. Check container status.")
-        generate_reports(note="Failed to connect to OpenVAS web interface")
-        return
+        # Try alternate port before giving up
+        if not try_alternate_port():
+            log_event("Web interface is not responding on either port 443 or 9392. Check container status.")
+            generate_reports(note="Failed to connect to OpenVAS web interface on ports 443 and 9392")
+            return
 
     # Test connection to OpenVAS API
-    log_event("Testing connection to OpenVAS...")
+    log_event("Testing connection to OpenVAS API...")
     version_response = openvas_request("/get_version")
     if not version_response:
         log_event("Failed to connect to OpenVAS API. Please check that the server is running and credentials are correct.")
@@ -440,11 +488,17 @@ def run_openvas_scan():
     
     log_event("All tasks completed!")
     log_event(f"You can access detailed reports and results via the web interface at {OPENVAS_URL}")
+    
+    return True  # Indicate successful scan
 
 # Run the scan
 if __name__ == "__main__":
     try:
-        run_openvas_scan()
+        success = run_openvas_scan()
+        if success:
+            sys.exit(0)
+        else:
+            sys.exit(1)
     except KeyboardInterrupt:
         log_event("Scan interrupted by user")
         sys.exit(1)

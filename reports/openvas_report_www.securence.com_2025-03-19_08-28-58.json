@@ -1,0 +1,12 @@
+{
+  "target": "https://www.securence.com",
+  "timestamp": "2025-03-19_08-28-58",
+  "note": "Failed to connect to OpenVAS web interface",
+  "scan_log": [
+    "08:28:58 - Error connecting to web interface: ('Connection aborted.', ConnectionAbortedError(10053, 'An established connection was aborted by the software in your host machine', None, 10053, None))",
+    "08:28:58 - Web interface is not responding. Check container status.",
+    "08:28:58 - No scan or report ID provided, generating empty reports"
+  ],
+  "status": "error",
+  "vulnerabilities": []
+}

@@ -1,0 +1,38 @@
+
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>OpenVAS Scan Report - https://www.securence.com</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+                        .container { max-width: 1000px; margin: 0 auto; }
+                        .header { background-color: #4CAF50; color: white; padding: 20px; margin-bottom: 20px; }
+                        .content { padding: 20px; background-color: #f9f9f9; border-radius: 5px; }
+                        .warning { color: #8a6d3b; background-color: #fcf8e3; border: 1px solid #faebcc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+                        .log { max-height: 400px; overflow-y: auto; background-color: #f5f5f5; padding: 10px; font-family: monospace; border: 1px solid #ddd; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>OpenVAS Vulnerability Scan Report</h1>
+                            <h2>https://www.securence.com</h2>
+                            <p>Scan Date: 2025-03-19 08:28:58</p>
+                        </div>
+                        <div class="content">
+                            <div class="warning">
+                                <h3>Scan Error</h3>
+                                <p><strong>Status:</strong> Failed to perform scan</p>
+                                <p><strong>Target:</strong> https://www.securence.com</p>
+                                <p><strong>Note:</strong> Failed to connect to OpenVAS web interface</p>
+                            </div>
+                            <p>Please access the full report via the web interface at https://localhost:443</p>
+                            <h3>Scan Log</h3>
+                            <div class="log">
+                                08:28:58 - Error connecting to web interface: ('Connection aborted.', ConnectionAbortedError(10053, 'An established connection was aborted by the software in your host machine', None, 10053, None))<br>08:28:58 - Web interface is not responding. Check container status.<br>08:28:58 - No scan or report ID provided, generating empty reports<br>08:28:58 - Generated empty JSON report<br>08:28:58 - Generated empty XML report
+                            </div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<report>
+  <target>https://www.securence.com</target>
+  <timestamp>2025-03-19_08-28-58</timestamp>
+  <status>error</status>
+  <note>Failed to connect to OpenVAS web interface</note>
+</report>
